@@ -8,6 +8,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AlunoScreen from './screens/aluno'; 
 import FuncionarioScreen from './screens/func'; 
+import TelaInicial from './screens/telainicial'; 
+import { useFonts } from 'expo-font'; 
 
 const Stack = createNativeStackNavigator();
 
@@ -38,12 +40,21 @@ const HomeScreen = ({ navigation }) => {
 };
 
 export default function App() {
+  const [fontsLoaded] = useFonts({
+    'Sora': require('./assets/fonts/Sora-Regular.ttf'), // Certifique-se de ter o arquivo de fonte correto
+  });
+
+  if (!fontsLoaded) {
+    return null; // Ou um componente de carregamento
+  }
+
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Home">
         <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
         <Stack.Screen name="Aluno" component={AlunoScreen} />
         <Stack.Screen name="Funcionário" component={FuncionarioScreen} />
+        <Stack.Screen name="TelaInicial" component={TelaInicial} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -52,7 +63,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1, 
-    backgroundColor: '#F9F9F9',
+    backgroundColor: '#FFF8F1',
     justifyContent: 'space-between', 
   },
   shadowContainer: {
@@ -65,15 +76,15 @@ const styles = StyleSheet.create({
   ellipse2: {
     flex: 0,
     justifyContent: 'flex-start',
-    marginTop: '90%', 
+    marginTop: '95%', 
     alignSelf: 'center',
-    width: 380,
+    width: '100%',
   },
   buttonContainer: {
     flex: 1, 
     justifyContent: 'flex-end', 
     alignItems: 'center', 
-    marginTop: '30%', 
+    marginTop: '45%', 
     marginBottom: '10%', 
   },
   button: {

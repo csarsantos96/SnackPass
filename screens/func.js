@@ -1,30 +1,49 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, Button, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { CheckBox } from 'react-native-elements';
+import { useFonts } from 'expo-font';
+import { useNavigation } from '@react-navigation/native';
 
 const FuncionarioScreen = () => {
+  const navigation = useNavigation();
   const [fullName, setFullName] = useState('');
   const [birthDate, setBirthDate] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [cpf, setCpf] = useState('');
   const [matricula, setMatricula] = useState('');
-
-  const [selectedService, setSelectedService] = useState(null); 
+  const [selectedService, setSelectedService] = useState(null);
 
   const handleCheckboxChange = (service) => {
-    setSelectedService(service); 
+    setSelectedService(service);
   };
 
   const handleSubmit = () => {
+    // Verificação se os campos obrigatórios estão preenchidos
+    if (!fullName || !birthDate || !phone || !email || !cpf || !matricula || !selectedService) {
+      Alert.alert("Erro", "Por favor, preencha todos os campos obrigatórios.");
+      return;
+    }
+
     console.log("Nome Completo:", fullName);
     console.log("Data de Nascimento:", birthDate);
     console.log("Telefone:", phone);
     console.log("Email:", email);
     console.log("CPF:", cpf);
     console.log("Matrícula:", matricula);
-    console.log("Serviço Selecionado:", selectedService); 
+    console.log("Serviço Selecionado:", selectedService);
+    
+    // Navegar para a tela inicial
+    navigation.navigate('TelaInicial');
   };
+
+  const [fontsLoaded] = useFonts({
+    'Sora': require('../assets/fonts/Sora-Regular.ttf'), // Caminho correto para a fonte
+  });
+
+  if (!fontsLoaded) {
+    return <Text>Carregando fontes...</Text>; // Mensagem de carregamento
+  }
 
   return (
     <ScrollView contentContainerStyle={styles.screenContainer}>
@@ -96,7 +115,9 @@ const FuncionarioScreen = () => {
         />
       </View>
 
-      <Button title="Enviar" onPress={handleSubmit} />
+      <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+        <Text style={styles.buttonText}>Entrar</Text>
+      </TouchableOpacity>
     </ScrollView>
   );
 };
@@ -105,6 +126,8 @@ const styles = StyleSheet.create({
   screenContainer: {
     padding: 20,
     justifyContent: 'center',
+    backgroundColor: '#FFF8F1',
+    flexGrow: 1,
   },
   title: {
     fontSize: 24,
@@ -126,6 +149,26 @@ const styles = StyleSheet.create({
   checkboxLabel: {
     marginVertical: 10,
     fontWeight: 'bold',
+  },
+  button: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 13.86,
+    paddingHorizontal: 17.33,
+    width: '80%',
+    height: 50,
+    backgroundColor: '#000066',
+    borderRadius: 13.86,
+    marginBottom: 20,
+    alignSelf: 'center',
+  },
+  buttonText: {
+    fontFamily: 'Sora',
+    fontWeight: '600',
+    fontSize: 15,
+    color: '#FFFFFF',
   },
 });
 
