@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import { CheckBox } from 'react-native-elements';
 import { useFonts } from 'expo-font';
 import { useNavigation } from '@react-navigation/native';
+import { TextInputMask } from 'react-native-masked-text'; // Importando a biblioteca para máscaras
 
 const FuncionarioScreen = () => {
   const navigation = useNavigation();
@@ -19,12 +20,6 @@ const FuncionarioScreen = () => {
   };
 
   const handleSubmit = () => {
-    // Verificação se os campos obrigatórios estão preenchidos
-    if (!fullName || !birthDate || !phone || !email || !cpf || !matricula || !selectedService) {
-      Alert.alert("Erro", "Por favor, preencha todos os campos obrigatórios.");
-      return;
-    }
-
     console.log("Nome Completo:", fullName);
     console.log("Data de Nascimento:", birthDate);
     console.log("Telefone:", phone);
@@ -38,11 +33,11 @@ const FuncionarioScreen = () => {
   };
 
   const [fontsLoaded] = useFonts({
-    'Sora': require('../assets/fonts/Sora-Regular.ttf'), // Caminho correto para a fonte
+    'Sora': require('../assets/fonts/Sora-Regular.ttf'),
   });
 
   if (!fontsLoaded) {
-    return <Text>Carregando fontes...</Text>; // Mensagem de carregamento
+    return null; // Ou um componente de carregamento
   }
 
   return (
@@ -54,13 +49,21 @@ const FuncionarioScreen = () => {
         value={fullName}
         onChangeText={setFullName}
       />
-      <TextInput
+      <TextInputMask
+        type={'datetime'}
+        options={{
+          format: 'DD/MM/YYYY'
+        }}
         style={styles.input}
         placeholder="Data de Nascimento (DD/MM/AAAA)"
         value={birthDate}
         onChangeText={setBirthDate}
       />
-      <TextInput
+      <TextInputMask
+        type={'custom'}
+        options={{
+          mask: '(99) 99999-9999' // Máscara para telefone brasileiro
+        }}
         style={styles.input}
         placeholder="Telefone"
         value={phone}
@@ -72,13 +75,21 @@ const FuncionarioScreen = () => {
         value={email}
         onChangeText={setEmail}
       />
-      <TextInput
+      <TextInputMask
+        type={'custom'}
+        options={{
+          mask: '999.999.999-99' // Máscara para CPF
+        }}
         style={styles.input}
         placeholder="CPF"
         value={cpf}
         onChangeText={setCpf}
       />
-      <TextInput
+      <TextInputMask
+        type={'custom'}
+        options={{
+          mask: '9999999' // Máscara para matrícula (apenas números)
+        }}
         style={styles.input}
         placeholder="Matrícula"
         value={matricula}

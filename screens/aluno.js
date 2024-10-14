@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import { CheckBox } from 'react-native-elements';
+import { useFonts } from 'expo-font';
 import { useNavigation } from '@react-navigation/native';
+import { TextInputMask } from 'react-native-masked-text';
 
 const AlunoScreen = () => {
   const navigation = useNavigation();
@@ -25,20 +27,72 @@ const AlunoScreen = () => {
     console.log("CPF:", cpf);
     console.log("Matrícula:", matricula);
     console.log("Nível de Ensino Selecionado:", selectedLevel);
-    
-    // Navegar para a tela inicial
     navigation.navigate('TelaInicial');
   };
+
+  const [fontsLoaded] = useFonts({
+    'Sora': require('../assets/fonts/Sora-Regular.ttf'),
+  });
+
+  if (!fontsLoaded) {
+    return null;
+  }
 
   return (
     <ScrollView contentContainerStyle={styles.screenContainer}>
       <Text style={styles.title}>Formulário do Aluno</Text>
-      <TextInput style={styles.input} placeholder="Nome Completo" value={fullName} onChangeText={setFullName} />
-      <TextInput style={styles.input} placeholder="Data de Nascimento (DD/MM/AAAA)" value={birthDate} onChangeText={setBirthDate} />
-      <TextInput style={styles.input} placeholder="Telefone" value={phone} onChangeText={setPhone} />
-      <TextInput style={styles.input} placeholder="Email" value={email} onChangeText={setEmail} />
-      <TextInput style={styles.input} placeholder="CPF" value={cpf} onChangeText={setCpf} />
-      <TextInput style={styles.input} placeholder="Matrícula" value={matricula} onChangeText={setMatricula} />
+      <TextInput
+        style={styles.input}
+        placeholder="Nome Completo"
+        value={fullName}
+        onChangeText={setFullName}
+      />
+      <TextInputMask
+        type={'datetime'}
+        options={{
+          format: 'DD/MM/YYYY'
+        }}
+        style={styles.input}
+        placeholder="Data de Nascimento (DD/MM/AAAA)"
+        value={birthDate}
+        onChangeText={setBirthDate}
+      />
+      <TextInputMask
+        type={'custom'}
+        options={{
+          mask: '(99) 99999-9999' // Máscara para telefone brasileiro
+        }}
+        style={styles.input}
+        placeholder="Telefone"
+        value={phone}
+        onChangeText={setPhone}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Email"
+        value={email}
+        onChangeText={setEmail}
+      />
+      <TextInputMask
+        type={'custom'}
+        options={{
+          mask: '999.999.999-99' // Máscara para CPF
+        }}
+        style={styles.input}
+        placeholder="CPF"
+        value={cpf}
+        onChangeText={setCpf}
+      />
+      <TextInputMask
+        type={'custom'}
+        options={{
+          mask: '9999999' // Máscara para matrícula
+        }}
+        style={styles.input}
+        placeholder="Matrícula"
+        value={matricula}
+        onChangeText={setMatricula}
+      />
 
       <Text style={styles.checkboxLabel}>Nível de Ensino:</Text>
       <View style={styles.checkboxContainer}>
@@ -101,7 +155,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#000066',
     borderRadius: 13.86,
     marginBottom: 20,
-    alignSelf: 'center', // Centraliza o botão
+    alignSelf: 'center',
   },
   buttonText: {
     fontFamily: 'Sora',
