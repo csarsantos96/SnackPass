@@ -60,7 +60,7 @@ const AlunoScreen = () => {
       <TextInputMask
         type={'custom'}
         options={{
-          mask: '(99) 99999-9999' // Máscara para telefone brasileiro
+          mask: '(99) 99999-9999'
         }}
         style={styles.input}
         placeholder="Telefone"
@@ -76,7 +76,7 @@ const AlunoScreen = () => {
       <TextInputMask
         type={'custom'}
         options={{
-          mask: '999.999.999-99' // Máscara para CPF
+          mask: '999.999.999-99' 
         }}
         style={styles.input}
         placeholder="CPF"
@@ -86,7 +86,7 @@ const AlunoScreen = () => {
       <TextInputMask
         type={'custom'}
         options={{
-          mask: '9999999' // Máscara para matrícula
+          mask: '9999999' 
         }}
         style={styles.input}
         placeholder="Matrícula"

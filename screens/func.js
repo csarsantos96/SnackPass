@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView } from 
 import { CheckBox } from 'react-native-elements';
 import { useFonts } from 'expo-font';
 import { useNavigation } from '@react-navigation/native';
-import { TextInputMask } from 'react-native-masked-text'; // Importando a biblioteca para máscaras
+import { TextInputMask } from 'react-native-masked-text'; 
 
 const FuncionarioScreen = () => {
   const navigation = useNavigation();
@@ -37,7 +37,7 @@ const FuncionarioScreen = () => {
   });
 
   if (!fontsLoaded) {
-    return null; // Ou um componente de carregamento
+    return null; 
   }
 
   return (
@@ -62,7 +62,7 @@ const FuncionarioScreen = () => {
       <TextInputMask
         type={'custom'}
         options={{
-          mask: '(99) 99999-9999' // Máscara para telefone brasileiro
+          mask: '(99) 99999-9999' 
         }}
         style={styles.input}
         placeholder="Telefone"
@@ -78,7 +78,7 @@ const FuncionarioScreen = () => {
       <TextInputMask
         type={'custom'}
         options={{
-          mask: '999.999.999-99' // Máscara para CPF
+          mask: '999.999.999-99' 
         }}
         style={styles.input}
         placeholder="CPF"
@@ -88,7 +88,7 @@ const FuncionarioScreen = () => {
       <TextInputMask
         type={'custom'}
         options={{
-          mask: '9999999' // Máscara para matrícula (apenas números)
+          mask: '9999999'
         }}
         style={styles.input}
         placeholder="Matrícula"

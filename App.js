@@ -41,11 +41,11 @@ const HomeScreen = ({ navigation }) => {
 
 export default function App() {
   const [fontsLoaded] = useFonts({
-    'Sora': require('./assets/fonts/Sora-Regular.ttf'), // Certifique-se de ter o arquivo de fonte correto
+    'Sora': require('./assets/fonts/Sora-Regular.ttf'), 
   });
 
   if (!fontsLoaded) {
-    return null; // Ou um componente de carregamento
+    return null; 
   }
 
   return (

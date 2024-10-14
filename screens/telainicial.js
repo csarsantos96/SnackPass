@@ -6,8 +6,7 @@ const TelaInicial = () => {
   const navigation = useNavigation();
 
   const handleNavigate = () => {
-    // Aqui você pode navegar para a próxima tela
-    // navigation.navigate('NomeDaOutraTela');
+    
     console.log("Navegar para outra tela");
   };
 
@@ -31,7 +30,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 20, // Espaçamento abaixo do título
+    marginBottom: 20, 
   },
   button: {
     paddingVertical: 10,
