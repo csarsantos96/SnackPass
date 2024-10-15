@@ -41,11 +41,11 @@ const HomeScreen = ({ navigation }) => {
 
 export default function App() {
   const [fontsLoaded] = useFonts({
-    'Sora': require('./assets/fonts/Sora-Regular.ttf'), 
+    'Sora': require('./assets/fonts/Sora-Regular.ttf'), // Certifique-se de ter o arquivo de fonte correto
   });
 
   if (!fontsLoaded) {
-    return null; 
+    return null; // Ou um componente de carregamento
   }
 
   return (
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
   },
   ellipse2: {
     flex: 0,
-    justifyContent: 'flex-start',
+    justifyContent: 'flex-end',
     marginTop: '95%', 
     alignSelf: 'center',
     width: '100%',
