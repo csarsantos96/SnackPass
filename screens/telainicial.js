@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image, ScrollView } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons'; 
+import { useCart } from '../context/CartContext';
+
 const products = [
   { id: 1, name: 'Café', price: 'R$ 3,00', category: 'Bebidas', image: require('../assets/Cafe.png') },
   { id: 2, name: 'Refrigerante', price: 'R$ 4,50', category: 'Bebidas', image: require('../assets/Cafe.png') },
@@ -14,20 +16,32 @@ const products = [
   { id: 10, name: 'Suco e Refrigerante', price: 'R$ 8,00', category: 'Combos', image: require('../assets/Cafe.png') },
   { id: 11, name: 'Refrigerante e Salgado', price: 'R$ 8,50', category: 'Combos', image: require('../assets/Cafe.png') },
   { id: 12, name: 'Salgado e Bolo', price: 'R$ 6,00', category: 'Combos', image: require('../assets/Cafe.png') },
-  
 ];
 
-const TelaInicial = () => {
+const TelaInicial = ({ navigation }) => {
   const [selectedCategory, setSelectedCategory] = useState('Todos');
+  const { cartItems, addToCart } = useCart();
 
+  // Filtrando produtos de acordo com a categoria selecionada
   const filteredProducts = selectedCategory === 'Todos'
     ? products
     : products.filter(product => product.category === selectedCategory);
+
+  const handleAddToCart = (item) => {
+    addToCart(item);
+  };
+
+  // Contando o número total de itens no carrinho
+  const totalItemsInCart = cartItems.reduce((total, item) => total + item.quantity, 0);
 
   return (
     <View style={styles.container}>
       <View style={styles.topSection}>
         <Text style={styles.title}>Bem-vindo à Tela Inicial!</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('Carrinho')} style={styles.cartButton}>
+          <FontAwesome name="shopping-cart" size={24} color="#FFFFFF" />
+          <Text style={styles.cartText}> Carrinho ({totalItemsInCart})</Text>
+        </TouchableOpacity>
       </View>
 
       <View style={styles.filtersContainer}>
@@ -50,11 +64,10 @@ const TelaInicial = () => {
         </ScrollView>
       </View>
 
-      
       <View style={styles.bottomSection}>
         <FlatList
           data={filteredProducts}
-          numColumns={2} 
+          numColumns={2}
           renderItem={({ item }) => (
             <View style={styles.productBox}>
               <Image source={item.image} style={styles.productImage} />
@@ -62,7 +75,10 @@ const TelaInicial = () => {
                 <Text style={styles.productName}>{item.name}</Text>
                 <View style={styles.addToCartRow}>
                   <Text style={styles.productPrice}>{item.price}</Text>
-                  <TouchableOpacity style={styles.addButton}>
+                  <TouchableOpacity 
+                    style={styles.addButton} 
+                    onPress={() => handleAddToCart(item)} // Adiciona o item ao carrinho
+                  >
                     <FontAwesome name="plus" size={16} color="#FFFFFF" />
                   </TouchableOpacity>
                 </View>
@@ -91,27 +107,26 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     color: '#FFFFFF',
-    marginBottom: 20, 
+    marginBottom: 20,
   },
-  filters: {
+  cartButton: {
     flexDirection: 'row',
-    backgroundColor: '#F9F9F9',
     alignItems: 'center',
-    paddingVertical: 5, 
-    height: 50, 
-    marginTop: 0, 
+    marginTop: 10,
   },
-  
+  cartText: {
+    color: '#FFFFFF',
+    marginLeft: 5,
+  },
   filtersContainer: {
-    flexDirection: 'row', 
-    alignItems: 'center', 
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: '#F9F9F9',
-    height: 60, 
-    paddingVertical: 5, 
-    paddingHorizontal: 10, 
+    height: 60,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
     marginTop: 0,
   },
-  
   filterButton: {
     paddingHorizontal: 16,
     paddingVertical: 8,

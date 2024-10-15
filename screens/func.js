@@ -68,6 +68,7 @@ const FuncionarioScreen = () => {
         placeholder="Telefone"
         value={phone}
         onChangeText={setPhone}
+        keyboardType="numeric"
       />
       <TextInput
         style={styles.input}
@@ -84,6 +85,7 @@ const FuncionarioScreen = () => {
         placeholder="CPF"
         value={cpf}
         onChangeText={setCpf}
+        keyboardType="numeric"
       />
       <TextInputMask
         type={'custom'}

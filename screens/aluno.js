@@ -66,6 +66,7 @@ const AlunoScreen = () => {
         placeholder="Telefone"
         value={phone}
         onChangeText={setPhone}
+        keyboardType="numeric"
       />
       <TextInput
         style={styles.input}
@@ -82,6 +83,7 @@ const AlunoScreen = () => {
         placeholder="CPF"
         value={cpf}
         onChangeText={setCpf}
+        keyboardType="numeric"
       />
       <TextInputMask
         type={'custom'}

@@ -1,6 +1,6 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View, Image, TouchableOpacity, Text } from 'react-native'; 
+import { StyleSheet, View, Image, TouchableOpacity, Text, ActivityIndicator } from 'react-native'; 
 import { LinearGradient } from 'expo-linear-gradient';
 import logo from './assets/logo.png'; 
 import ellipse2 from './assets/ellipse2.png'; 
@@ -9,6 +9,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AlunoScreen from './screens/aluno'; 
 import FuncionarioScreen from './screens/func'; 
 import TelaInicial from './screens/telainicial'; 
+import Carrinho from './screens/carrinho'; 
+import { CartProvider } from './context/CartContext';
 import { useFonts } from 'expo-font'; 
 
 const Stack = createNativeStackNavigator();
@@ -17,12 +19,10 @@ const HomeScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Image source={ellipse2} style={styles.ellipse2} />
-      
       <LinearGradient
         colors={['rgba(202, 146, 123, 0)', 'rgba(4, 0, 51, 0.14)']}
         style={styles.shadowContainer}
       />
-
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Aluno')}>
           <Text style={styles.buttonText}>Aluno</Text>
@@ -31,9 +31,7 @@ const HomeScreen = ({ navigation }) => {
           <Text style={styles.buttonText}>Funcionário</Text>
         </TouchableOpacity>
       </View>
-
       <Image source={logo} style={styles.logo} />
-      
       <StatusBar style="auto" />
     </View>
   );
@@ -41,25 +39,27 @@ const HomeScreen = ({ navigation }) => {
 
 export default function App() {
   const [fontsLoaded] = useFonts({
-    'Sora': require('./assets/fonts/Sora-Regular.ttf'), // Certifique-se de ter o arquivo de fonte correto
+    'Sora': require('./assets/fonts/Sora-Regular.ttf'),
   });
 
   if (!fontsLoaded) {
-    return null; // Ou um componente de carregamento
+    return <ActivityIndicator size="large" color="#000066" style={{ flex: 1, justifyContent: 'center' }} />;
   }
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="Aluno" component={AlunoScreen} />
-        <Stack.Screen name="Funcionário" component={FuncionarioScreen} />
-        <Stack.Screen name="TelaInicial" component={TelaInicial} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <CartProvider>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Home">
+          <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="Aluno" component={AlunoScreen} />
+          <Stack.Screen name="Funcionário" component={FuncionarioScreen} />
+          <Stack.Screen name="TelaInicial" component={TelaInicial} />
+          <Stack.Screen name="Carrinho" component={Carrinho} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </CartProvider>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1, 
