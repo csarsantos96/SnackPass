@@ -22,7 +22,7 @@ const TelaInicial = ({ navigation }) => {
   const [selectedCategory, setSelectedCategory] = useState('Todos');
   const { cartItems, addToCart } = useCart();
 
-  // Filtrando produtos de acordo com a categoria selecionada
+  
   const filteredProducts = selectedCategory === 'Todos'
     ? products
     : products.filter(product => product.category === selectedCategory);
@@ -31,7 +31,7 @@ const TelaInicial = ({ navigation }) => {
     addToCart(item);
   };
 
-  // Contando o número total de itens no carrinho
+  
   const totalItemsInCart = cartItems.reduce((total, item) => total + item.quantity, 0);
 
   return (
@@ -77,7 +77,7 @@ const TelaInicial = ({ navigation }) => {
                   <Text style={styles.productPrice}>{item.price}</Text>
                   <TouchableOpacity 
                     style={styles.addButton} 
-                    onPress={() => handleAddToCart(item)} // Adiciona o item ao carrinho
+                    onPress={() => handleAddToCart(item)} 
                   >
                     <FontAwesome name="plus" size={16} color="#FFFFFF" />
                   </TouchableOpacity>

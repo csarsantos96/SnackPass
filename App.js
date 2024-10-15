@@ -10,6 +10,8 @@ import AlunoScreen from './screens/aluno';
 import FuncionarioScreen from './screens/func'; 
 import TelaInicial from './screens/telainicial'; 
 import Carrinho from './screens/carrinho'; 
+import Login from './login'; 
+import Index from './index'; 
 import { CartProvider } from './context/CartContext';
 import { useFonts } from 'expo-font'; 
 
@@ -24,11 +26,11 @@ const HomeScreen = ({ navigation }) => {
         style={styles.shadowContainer}
       />
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Aluno')}>
-          <Text style={styles.buttonText}>Aluno</Text>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Login')}>
+          <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Funcionário')}>
-          <Text style={styles.buttonText}>Funcionário</Text>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Index')}>
+          <Text style={styles.buttonText}>Cadastrar-se</Text>
         </TouchableOpacity>
       </View>
       <Image source={logo} style={styles.logo} />
@@ -51,6 +53,8 @@ export default function App() {
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Home">
           <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
+          <Stack.Screen name="Index" component={Index} options={{ headerShown: false }} />
           <Stack.Screen name="Aluno" component={AlunoScreen} />
           <Stack.Screen name="Funcionário" component={FuncionarioScreen} />
           <Stack.Screen name="TelaInicial" component={TelaInicial} />
@@ -60,6 +64,7 @@ export default function App() {
     </CartProvider>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1, 

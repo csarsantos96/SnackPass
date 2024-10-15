@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert } from 'react-native';
-import { useCart } from '../context/CartContext'; // Importa o useCart
+import { useCart } from '../context/CartContext';
 
 const Carrinho = ({ navigation }) => {
-  const { cartItems, removeFromCart, incrementProduct, decrementProduct } = useCart(); // Usa o contexto do carrinho
+  const { cartItems, removeFromCart, incrementProduct, decrementProduct } = useCart(); 
 
   const removerProduto = (id) => {
     Alert.alert(
@@ -14,7 +14,7 @@ const Carrinho = ({ navigation }) => {
         {
           text: 'Remover',
           onPress: () => {
-            removeFromCart(id); // Remove o item
+            removeFromCart(id); 
           },
         },
       ],
