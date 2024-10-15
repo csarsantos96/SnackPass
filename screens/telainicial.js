@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image, ScrollView } from 'react-native';
-import { FontAwesome } from '@expo/vector-icons'; // Ícone de adicionar ao carrinho
-
+import { FontAwesome } from '@expo/vector-icons'; 
 const products = [
   { id: 1, name: 'Café', price: 'R$ 3,00', category: 'Bebidas', image: require('../assets/Cafe.png') },
   { id: 2, name: 'Refrigerante', price: 'R$ 4,50', category: 'Bebidas', image: require('../assets/Cafe.png') },
@@ -15,7 +14,7 @@ const products = [
   { id: 10, name: 'Suco e Refrigerante', price: 'R$ 8,00', category: 'Combos', image: require('../assets/Cafe.png') },
   { id: 11, name: 'Refrigerante e Salgado', price: 'R$ 8,50', category: 'Combos', image: require('../assets/Cafe.png') },
   { id: 12, name: 'Salgado e Bolo', price: 'R$ 6,00', category: 'Combos', image: require('../assets/Cafe.png') },
-  // Adicione mais produtos aqui
+  
 ];
 
 const TelaInicial = () => {
@@ -27,7 +26,6 @@ const TelaInicial = () => {
 
   return (
     <View style={styles.container}>
-      {/* Seção superior (30% da tela) */}
       <View style={styles.topSection}>
         <Text style={styles.title}>Bem-vindo à Tela Inicial!</Text>
       </View>
@@ -56,7 +54,7 @@ const TelaInicial = () => {
       <View style={styles.bottomSection}>
         <FlatList
           data={filteredProducts}
-          numColumns={2} // Mostra dois produtos por linha
+          numColumns={2} 
           renderItem={({ item }) => (
             <View style={styles.productBox}>
               <Image source={item.image} style={styles.productImage} />
