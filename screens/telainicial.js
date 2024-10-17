@@ -35,7 +35,7 @@ const TelaInicial = ({ navigation }) => {
 
   const totalItemsInCart = cartItems.reduce((total, item) => total + item.quantity, 0);
 
-  // Estado para a página ativa da NavBar
+
   const [activePage, setActivePage] = useState('TelaInicial');
 
   return (
@@ -50,21 +50,17 @@ const TelaInicial = ({ navigation }) => {
 
       <View style={styles.filtersContainer}>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.filters}>
-          <TouchableOpacity onPress={() => setSelectedCategory('Todos')} style={styles.filterButton}>
-            <Text style={styles.filterText}>Todos</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => setSelectedCategory('Combos')} style={styles.filterButton}>
-            <Text style={styles.filterText}>Combos</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => setSelectedCategory('Comidas')} style={styles.filterButton}>
-            <Text style={styles.filterText}>Comidas</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => setSelectedCategory('Bebidas')} style={styles.filterButton}>
-            <Text style={styles.filterText}>Bebidas</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => setSelectedCategory('Outros')} style={styles.filterButton}>
-            <Text style={styles.filterText}>Outros</Text>
-          </TouchableOpacity>
+          {['Todos', 'Combos', 'Comidas', 'Bebidas', 'Outros'].map((category) => (
+            <TouchableOpacity 
+              key={category} 
+              onPress={() => setSelectedCategory(category)} 
+              style={[styles.filterButton, { backgroundColor: selectedCategory === category ? '#000066' : '#DEDEDE' }]} 
+            >
+              <Text style={[styles.filterText, { color: selectedCategory === category ? '#FFFFFF' : '#050505' }]}> 
+                {category}
+              </Text>
+            </TouchableOpacity>
+          ))}
         </ScrollView>
       </View>
 
@@ -125,8 +121,8 @@ const TelaInicial = ({ navigation }) => {
         <TouchableOpacity 
           style={styles.navItem} 
           onPress={() => {
-            setActivePage('Pagamento'); // Altera a página ativa para Pagamento
-            navigation.navigate('Pagamento'); // Navega para a tela de Pagamento
+            setActivePage('Pagamento'); 
+            navigation.navigate('Pagamento'); 
           }}
         >
           <View style={styles.navItemContainer}>
@@ -189,7 +185,7 @@ const styles = StyleSheet.create({
   filterButton: {
     paddingHorizontal: 16,
     paddingVertical: 8,
-    backgroundColor: '#E9E4DE',
+    backgroundColor: '#DEDEDE',
     borderRadius: 8,
     marginHorizontal: 4,
   },
@@ -212,7 +208,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     marginRight:10,
     marginLeft:10,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#E9E4DE',
     borderRadius: 8,
     elevation: 1,
     padding: 10,
