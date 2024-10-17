@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image, ScrollView } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons'; 
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { useCart } from '../context/CartContext';
+
 
 const products = [
   { id: 1, name: 'Café', price: 'R$ 3,00', category: 'Bebidas', image: require('../assets/Cafe.png') },
@@ -22,7 +25,6 @@ const TelaInicial = ({ navigation }) => {
   const [selectedCategory, setSelectedCategory] = useState('Todos');
   const { cartItems, addToCart } = useCart();
 
-  
   const filteredProducts = selectedCategory === 'Todos'
     ? products
     : products.filter(product => product.category === selectedCategory);
@@ -31,8 +33,10 @@ const TelaInicial = ({ navigation }) => {
     addToCart(item);
   };
 
-  
   const totalItemsInCart = cartItems.reduce((total, item) => total + item.quantity, 0);
+
+  // Estado para a página ativa da NavBar
+  const [activePage, setActivePage] = useState('TelaInicial');
 
   return (
     <View style={styles.container}>
@@ -86,8 +90,63 @@ const TelaInicial = ({ navigation }) => {
             </View>
           )}
           keyExtractor={item => item.id.toString()}
-          contentContainerStyle={{ marginTop: 10 }}
+          contentContainerStyle={{ marginTop: 10,  }}
         />
+      </View>
+
+      {/* Nav Bar */}
+      <View style={styles.navBar}>
+        <TouchableOpacity 
+          style={styles.navItem} 
+          onPress={() => {
+            setActivePage('TelaInicial');
+            navigation.navigate('TelaInicial');
+          }}
+        >
+          <View style={styles.navItemContainer}>
+            <FontAwesome6 name="house" size={20} color={activePage === 'TelaInicial' ? '#A80000' : '#A2A2A2'} />
+          </View>
+          {activePage === 'TelaInicial' && <View style={styles.elipse} />}
+        </TouchableOpacity>
+
+        <TouchableOpacity 
+          style={styles.navItem} 
+          onPress={() => {
+            setActivePage('Carrinho');
+            navigation.navigate('Carrinho');
+          }}
+        >
+          <View style={styles.navItemContainer}>
+            <FontAwesome name="shopping-cart" size={30} color={activePage === 'Carrinho' ? '#A80000' : '#A2A2A2'} />
+          </View>
+          {activePage === 'Carrinho' && <View style={styles.elipse} />}
+        </TouchableOpacity>
+
+        <TouchableOpacity 
+          style={styles.navItem} 
+          onPress={() => {
+            setActivePage('Pagamento'); // Altera a página ativa para Pagamento
+            navigation.navigate('Pagamento'); // Navega para a tela de Pagamento
+          }}
+        >
+          <View style={styles.navItemContainer}>
+            <FontAwesome name="credit-card" size={24} color={activePage === 'Pagamento' ? '#A80000' : '#A2A2A2'} style={styles.cardIcon} />
+          </View>
+          {activePage === 'Pagamento' && <View style={styles.elipse} />}
+        </TouchableOpacity>
+
+        <TouchableOpacity 
+          style={styles.navItem} 
+          onPress={() => {
+            setActivePage('Notificações');
+            navigation.navigate('Notificações');
+          }}
+        >
+          <View style={styles.navItemContainer}>
+            <Ionicons name="ticket" size={30} color={activePage === 'Notificações' ? '#A80000' : '#A2A2A2'} />
+          </View>
+          {activePage === 'Notificações' && <View style={styles.elipse} />}
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -149,52 +208,74 @@ const styles = StyleSheet.create({
   productBox: {
     flex: 1,
     flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 8,
-    margin: 8,
-    width: 156,
-    height: 220,
-    backgroundColor: '#E9E4DE',
-    borderRadius: 16,
+    justifyContent: 'space-between',
+    marginBottom: 16,
+    marginRight:10,
+    marginLeft:10,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 8,
+    elevation: 1,
+    padding: 10,
+    width: '45%',
   },
   productImage: {
-    width: 140,
-    height: 128,
-    backgroundColor: '#A40000',
-    borderRadius: 12,
+    width: '100%',
+    height: 120,
+    borderRadius: 8,
   },
   productDetails: {
+    marginTop: 10,
     flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-    width: 140,
-    height: 64,
+    justifyContent: 'space-between',
+    flex: 1,
   },
   productName: {
     fontSize: 16,
-    fontWeight: '600',
-    color: '#242424',
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  productPrice: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#000066',
   },
   addToCartRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    width: 140,
-    height: 32,
-  },
-  productPrice: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#050505',
   },
   addButton: {
-    width: 32,
-    height: 32,
     backgroundColor: '#000066',
-    borderRadius: 8,
-    justifyContent: 'center',
+    padding: 5,
+    borderRadius: 5,
+  },
+  navBar: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
     alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    height: 60,
+    elevation: 5,
+  },
+  navItem: {
+    alignItems: 'center',
+    position: 'relative',
+    width: 60, 
+    marginBottom: 10,
+  },
+  navText: {
+    fontSize: 12,
+    color: '#A2A2A2',
+  },
+  elipse: {
+    position: 'absolute',
+    bottom: -10,
+    width: 20,
+    height: 5,
+    borderRadius: 10,
+    backgroundColor: '#A80000',
+    left: '50%',
+    marginLeft: -10,
   },
 });
 
