@@ -151,6 +151,7 @@ const TelaInicial = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#F9F9F9',
   },
   topSection: {
     flex: 0.5,
@@ -255,6 +256,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
     height: 75,
+    borderTopLeftRadius: 24,
+    borderTopRightRadius:24,
     elevation: 5,
   },
   navItem: {
