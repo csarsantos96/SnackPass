@@ -220,20 +220,20 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   productDetails: {
-    marginTop: 10,
+    marginTop: 5,
     flexDirection: 'column',
     justifyContent: 'space-between',
     flex: 1,
   },
   productName: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
-    color: '#333',
+    color: '#242424',
   },
   productPrice: {
-    fontSize: 14,
+    fontSize: 15,
     fontWeight: 'bold',
-    color: '#000066',
+    color: '#00005C',
   },
   addToCartRow: {
     flexDirection: 'row',
@@ -242,15 +242,19 @@ const styles = StyleSheet.create({
   },
   addButton: {
     backgroundColor: '#000066',
-    padding: 5,
-    borderRadius: 5,
+    paddingVertical: 10,
+    paddingHorizontal: 12, 
+    borderRadius: 8,
+    width: 40 ,
+    height:35, 
+    alignItems: 'center', 
   },
   navBar: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
-    height: 60,
+    height: 75,
     elevation: 5,
   },
   navItem: {
