@@ -1,14 +1,14 @@
 import React from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { useCart } from '../context/CartContext';
 
-const Pagamento = ({ navigation }) => {
+const Validacao = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.titulo}>Tela de Pagamento</Text>
+      <Text style={styles.titulo}>Tela de Validação</Text>
+      {/* Adicione seu conteúdo aqui */}
 
       {/* Nav Bar */}
       <View style={styles.navBar}>
@@ -35,7 +35,7 @@ const Pagamento = ({ navigation }) => {
           onPress={() => navigation.navigate('Pagamento')}
         >
           <View style={styles.navItemContainer}>
-            <FontAwesome name="credit-card" size={24} color={'#A80000'} />
+            <FontAwesome name="credit-card" size={24} color={'#A2A2A2'} />
           </View>
         </TouchableOpacity>
 
@@ -44,7 +44,7 @@ const Pagamento = ({ navigation }) => {
           onPress={() => navigation.navigate('Validação')}
         >
           <View style={styles.navItemContainer}>
-            <Ionicons name="ticket" size={30} color={'#A2A2A2'} />
+            <Ionicons name="ticket" size={30} color={'#A80000'} />
           </View>
         </TouchableOpacity>
       </View>
@@ -84,4 +84,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Pagamento;
+export default Validacao;

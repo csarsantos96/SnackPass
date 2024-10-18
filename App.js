@@ -11,7 +11,7 @@ import FuncionarioScreen from './screens/func';
 import TelaInicial from './screens/telainicial'; 
 import Carrinho from './screens/carrinho'; 
 import Pagamento from './screens/pagamento'; 
-import Validacao from './screens/validação'; // Corrigido para o nome correto
+import Validacao from './screens/validacao'; // Corrigido para o nome correto
 import Login from './login'; 
 import Index from './index'; 
 import { CartProvider } from './context/CartContext';
