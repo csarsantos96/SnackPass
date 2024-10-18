@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image, ScrollView } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons'; 
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useCart } from '../context/CartContext';
+import { useFocusEffect } from '@react-navigation/native';
 
 
 const products = [
@@ -24,6 +25,7 @@ const products = [
 const TelaInicial = ({ navigation }) => {
   const [selectedCategory, setSelectedCategory] = useState('Todos');
   const { cartItems, addToCart } = useCart();
+  const [activePage, setActivePage] = useState('TelaInicial');
 
   const filteredProducts = selectedCategory === 'Todos'
     ? products
@@ -36,7 +38,9 @@ const TelaInicial = ({ navigation }) => {
   const totalItemsInCart = cartItems.reduce((total, item) => total + item.quantity, 0);
 
 
-  const [activePage, setActivePage] = useState('TelaInicial');
+  useFocusEffect(() => {
+    setActivePage('TelaInicial');
+  });
 
   return (
     <View style={styles.container}>
@@ -134,14 +138,14 @@ const TelaInicial = ({ navigation }) => {
         <TouchableOpacity 
           style={styles.navItem} 
           onPress={() => {
-            setActivePage('Notificações');
-            navigation.navigate('Notificações');
+            setActivePage('');
+            navigation.navigate('Validação');
           }}
         >
           <View style={styles.navItemContainer}>
-            <Ionicons name="ticket" size={30} color={activePage === 'Notificações' ? '#A80000' : '#A2A2A2'} />
+            <Ionicons name="ticket" size={30} color={activePage === 'validacao' ? '#A80000' : '#A2A2A2'} />
           </View>
-          {activePage === 'Notificações' && <View style={styles.elipse} />}
+          {activePage === 'validacao' && <View style={styles.elipse} />}
         </TouchableOpacity>
       </View>
     </View>

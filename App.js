@@ -10,6 +10,8 @@ import AlunoScreen from './screens/aluno';
 import FuncionarioScreen from './screens/func'; 
 import TelaInicial from './screens/telainicial'; 
 import Carrinho from './screens/carrinho'; 
+import Pagamento from './screens/pagamento'; 
+import Validacao from './screens/validação'; // Corrigido para o nome correto
 import Login from './login'; 
 import Index from './index'; 
 import { CartProvider } from './context/CartContext';
@@ -51,7 +53,7 @@ export default function App() {
   return (
     <CartProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Home">
+          <Stack.Navigator initialRouteName="Home">
           <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
           <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
           <Stack.Screen name="Index" component={Index} options={{ headerShown: false }} />
@@ -59,6 +61,8 @@ export default function App() {
           <Stack.Screen name="Funcionário" component={FuncionarioScreen} />
           <Stack.Screen name="TelaInicial" component={TelaInicial} />
           <Stack.Screen name="Carrinho" component={Carrinho} />
+          <Stack.Screen name="Pagamento" component={Pagamento} /> 
+          <Stack.Screen name="Validação" component={Validacao} />
         </Stack.Navigator>
       </NavigationContainer>
     </CartProvider>
