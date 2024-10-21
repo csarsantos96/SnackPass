@@ -56,7 +56,7 @@ const CadastroScreen = () => {
     const handleSubmit = () => {
         // Validação de senha
         if (password !== confirmPassword) {
-            Alert.alert('Erro', 'As senhas não conferem. Por favor, verifique.');
+            Alert.alert('Error', 'As senhas não conferem. Por favor, verifique.');
             return;
         }
 
