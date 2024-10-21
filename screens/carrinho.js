@@ -26,7 +26,6 @@ const Carrinho = ({ navigation }) => {
   };
 
   const renderItem = ({ item }) => {
-    // Verifica se item.price é um número; se não, define como 0
     const price = typeof item.price === 'number' ? item.price : 0;
 
     return (
@@ -61,7 +60,7 @@ const Carrinho = ({ navigation }) => {
       />
       {cartItems.length === 0 && <Text style={styles.emptyText}>Carrinho vazio!</Text>}
 
-      {/* Linha divisória */}
+      
       <View style={styles.line} />
 
       {/* Valor total e botão de pagamento */}

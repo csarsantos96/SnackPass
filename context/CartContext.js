@@ -48,7 +48,7 @@ export const CartProvider = ({ children }) => {
 
   const getTotalPrice = () => {
     return cartItems.reduce(
-      (total, item) => total + (item.price || 0) * item.quantity, // Verifica se item.price está presente
+      (total, item) => total + (item.price || 0) * item.quantity, 
       0
     );
   };
