@@ -8,17 +8,22 @@ import { useFocusEffect } from '@react-navigation/native';
 
 const products = [
   { id: 1, name: 'Café', price: 3.00, category: 'Bebidas', image: require('../assets/Cafe.png') },
-  { id: 2, name: 'Refrigerante', price: 4.50, category: 'Bebidas', image: require('../assets/Cafe.png') },
+  { id: 2, name: 'Refrigerante', price: 4.50, category: 'Bebidas', image: require('../assets/refri.png') },
   { id: 3, name: 'Bolo', price: 6.00, category: 'Comidas', image: require('../assets/Cafe.png') },
-  { id: 4, name: 'Suco', price: 3.00, category: 'Bebidas', image: require('../assets/Cafe.png') },
-  { id: 5, name: 'Tip-top', price: 4.50, category: 'Bebidas', image: require('../assets/Cafe.png') },
-  { id: 6, name: 'Salgado', price: 6.00, category: 'Comidas', image: require('../assets/Cafe.png') },
-  { id: 7, name: 'Suco e salgado', price: 8.00, category: 'Combos', image: require('../assets/Cafe.png') },
-  { id: 8, name: 'Refrigerante e salgado', price: 8.50, category: 'Combos', image: require('../assets/Cafe.png') },
-  { id: 9, name: 'Salgado e Bolo', price: 6.00, category: 'Combos', image: require('../assets/Cafe.png') },
-  { id: 10, name: 'Suco e Refrigerante', price: 8.00, category: 'Combos', image: require('../assets/Cafe.png') },
-  { id: 11, name: 'Refrigerante e Salgado', price: 8.50, category: 'Combos', image: require('../assets/Cafe.png') },
-  { id: 12, name: 'Salgado e Bolo', price: 6.00, category: 'Combos', image: require('../assets/Cafe.png') },
+  { id: 4, name: 'Suco', price: 5.00, category: 'Bebidas', image: require('../assets/suco.png') },
+  { id: 5, name: 'Tip-top', price: 2.50, category: 'Bebidas', image: require('../assets/tip-top.png') },
+  { id: 6, name: 'Salgado', price: 4.00, category: 'Comidas', image: require('../assets/salgado.png') },
+  { id: 7, name: 'Suco e salgado', price: 9.00, category: 'Combos', image: require('../assets/salgado+suco.png') },
+  { id: 8, name: 'Refrigerante e salgado', price: 8.50, category: 'Combos', image: require('../assets/salgado+refri.png') },
+  { id: 9, name: 'Suco e Refrigerante', price: 9.50, category: 'Combos', image: require('../assets/suco+refri.png') },
+  { id: 10, name: 'Refrigerante e Salgado', price: 8.00, category: 'Combos', image: require('../assets/salgado+refri.png') },
+  { id: 12, name: 'Halls', price: 1.50, category: 'Outros', image: require('../assets/halls.png') },
+  { id: 13, name: 'Produto', price: 8.50, category: 'Outros', image: require('../assets/fundo.png') },
+  { id: 14, name: 'Produto', price: 8.50, category: 'Outros', image: require('../assets/fundo.png') },
+  { id: 15, name: 'Produto', price: 8.50, category: 'Outros', image: require('../assets/fundo.png') },
+  { id: 16, name: 'Produto', price: 8.50, category: 'Outros', image: require('../assets/fundo.png') },
+  { id: 17, name: 'Produto', price: 8.50, category: 'Outros', image: require('../assets/fundo.png') },
+
 ];
 
 const TelaInicial = ({ navigation }) => {
@@ -88,7 +93,7 @@ const TelaInicial = ({ navigation }) => {
             </View>
           )}
           keyExtractor={item => item.id.toString()}
-          contentContainerStyle={{ marginTop: 10 }}
+          contentContainerStyle={{ marginTop: 10 }}  
         />
       </View>
 
@@ -186,7 +191,7 @@ const styles = StyleSheet.create({
     marginTop: 0,
   },
   filterButton: {
-    paddingHorizontal: 16,
+    paddingHorizontal: 10,
     paddingVertical: 8,
     backgroundColor: '#DEDEDE',
     borderRadius: 8,
