@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image, ScrollView } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons'; 
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
@@ -6,20 +6,19 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { useCart } from '../context/CartContext';
 import { useFocusEffect } from '@react-navigation/native';
 
-
 const products = [
-  { id: 1, name: 'Café', price: 'R$ 3,00', category: 'Bebidas', image: require('../assets/Cafe.png') },
-  { id: 2, name: 'Refrigerante', price: 'R$ 4,50', category: 'Bebidas', image: require('../assets/Cafe.png') },
-  { id: 3, name: 'Bolo', price: 'R$ 6,00', category: 'Comidas', image: require('../assets/Cafe.png') },
-  { id: 4, name: 'Suco', price: 'R$ 3,00', category: 'Bebidas', image: require('../assets/Cafe.png') },
-  { id: 5, name: 'Tip-top', price: 'R$ 4,50', category: 'Bebidas', image: require('../assets/Cafe.png') },
-  { id: 6, name: 'Salgado', price: 'R$ 6,00', category: 'Comidas', image: require('../assets/Cafe.png') },
-  { id: 7, name: 'Suco e salgado', price: 'R$ 8,00', category: 'Combos', image: require('../assets/Cafe.png') },
-  { id: 8, name: 'Refrigerante e salgado', price: 'R$ 8,50', category: 'Combos', image: require('../assets/Cafe.png') },
-  { id: 9, name: 'Salgado e Bolo', price: 'R$ 6,00', category: 'Combos', image: require('../assets/Cafe.png') },
-  { id: 10, name: 'Suco e Refrigerante', price: 'R$ 8,00', category: 'Combos', image: require('../assets/Cafe.png') },
-  { id: 11, name: 'Refrigerante e Salgado', price: 'R$ 8,50', category: 'Combos', image: require('../assets/Cafe.png') },
-  { id: 12, name: 'Salgado e Bolo', price: 'R$ 6,00', category: 'Combos', image: require('../assets/Cafe.png') },
+  { id: 1, name: 'Café', price: 3.00, category: 'Bebidas', image: require('../assets/Cafe.png') },
+  { id: 2, name: 'Refrigerante', price: 4.50, category: 'Bebidas', image: require('../assets/Cafe.png') },
+  { id: 3, name: 'Bolo', price: 6.00, category: 'Comidas', image: require('../assets/Cafe.png') },
+  { id: 4, name: 'Suco', price: 3.00, category: 'Bebidas', image: require('../assets/Cafe.png') },
+  { id: 5, name: 'Tip-top', price: 4.50, category: 'Bebidas', image: require('../assets/Cafe.png') },
+  { id: 6, name: 'Salgado', price: 6.00, category: 'Comidas', image: require('../assets/Cafe.png') },
+  { id: 7, name: 'Suco e salgado', price: 8.00, category: 'Combos', image: require('../assets/Cafe.png') },
+  { id: 8, name: 'Refrigerante e salgado', price: 8.50, category: 'Combos', image: require('../assets/Cafe.png') },
+  { id: 9, name: 'Salgado e Bolo', price: 6.00, category: 'Combos', image: require('../assets/Cafe.png') },
+  { id: 10, name: 'Suco e Refrigerante', price: 8.00, category: 'Combos', image: require('../assets/Cafe.png') },
+  { id: 11, name: 'Refrigerante e Salgado', price: 8.50, category: 'Combos', image: require('../assets/Cafe.png') },
+  { id: 12, name: 'Salgado e Bolo', price: 6.00, category: 'Combos', image: require('../assets/Cafe.png') },
 ];
 
 const TelaInicial = ({ navigation }) => {
@@ -36,7 +35,6 @@ const TelaInicial = ({ navigation }) => {
   };
 
   const totalItemsInCart = cartItems.reduce((total, item) => total + item.quantity, 0);
-
 
   useFocusEffect(() => {
     setActivePage('TelaInicial');
@@ -78,7 +76,7 @@ const TelaInicial = ({ navigation }) => {
               <View style={styles.productDetails}>
                 <Text style={styles.productName}>{item.name}</Text>
                 <View style={styles.addToCartRow}>
-                  <Text style={styles.productPrice}>{item.price}</Text>
+                  <Text style={styles.productPrice}>R$ {item.price.toFixed(2).replace('.', ',')}</Text>
                   <TouchableOpacity 
                     style={styles.addButton} 
                     onPress={() => handleAddToCart(item)} 
@@ -90,7 +88,7 @@ const TelaInicial = ({ navigation }) => {
             </View>
           )}
           keyExtractor={item => item.id.toString()}
-          contentContainerStyle={{ marginTop: 10,  }}
+          contentContainerStyle={{ marginTop: 10 }}
         />
       </View>
 
@@ -211,8 +209,8 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'space-between',
     marginBottom: 16,
-    marginRight:10,
-    marginLeft:10,
+    marginRight: 10,
+    marginLeft: 10,
     backgroundColor: '#E9E4DE',
     borderRadius: 8,
     elevation: 1,
@@ -250,8 +248,8 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 12, 
     borderRadius: 8,
-    width: 40 ,
-    height:35, 
+    width: 40,
+    height: 35, 
     alignItems: 'center', 
   },
   navBar: {
@@ -261,7 +259,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     height: 75,
     borderTopLeftRadius: 24,
-    borderTopRightRadius:24,
+    borderTopRightRadius: 24,
     elevation: 5,
   },
   navItem: {

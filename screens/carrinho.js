@@ -6,7 +6,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { useCart } from '../context/CartContext';
 
 const Carrinho = ({ navigation }) => {
-  const { cartItems, removeFromCart, incrementProduct, decrementProduct } = useCart(); 
+  const { cartItems, removeFromCart, incrementProduct, decrementProduct, getTotalPrice } = useCart();
 
   const removerProduto = (id) => {
     Alert.alert(
@@ -17,7 +17,7 @@ const Carrinho = ({ navigation }) => {
         {
           text: 'Remover',
           onPress: () => {
-            removeFromCart(id); 
+            removeFromCart(id);
           },
         },
       ],
@@ -25,24 +25,31 @@ const Carrinho = ({ navigation }) => {
     );
   };
 
-  const renderItem = ({ item }) => (
-    <View style={styles.produtoContainer}>
-      <Text style={styles.produtoNome}>{item.name}</Text>
-      <Text style={styles.produtoPreco}>{item.price}</Text>
-      <View style={styles.quantidadeContainer}>
-        <TouchableOpacity style={styles.quantidadeButton} onPress={() => decrementProduct(item.id)}>
-          <Text style={styles.quantidadeButtonText}>-</Text>
-        </TouchableOpacity>
-        <Text style={styles.quantidadeText}>{item.quantity}</Text>
-        <TouchableOpacity style={styles.quantidadeButton} onPress={() => incrementProduct(item.id)}>
-          <Text style={styles.quantidadeButtonText}>+</Text>
+  const renderItem = ({ item }) => {
+    // Verifica se item.price é um número; se não, define como 0
+    const price = typeof item.price === 'number' ? item.price : 0;
+
+    return (
+      <View style={styles.produtoContainer}>
+        <Text style={styles.produtoNome}>{item.name || 'Produto sem nome'}</Text>
+        <Text style={styles.produtoPreco}>
+          {price > 0 ? `R$ ${price.toFixed(2)}` : 'Preço não disponível'}
+        </Text>
+        <View style={styles.quantidadeContainer}>
+          <TouchableOpacity style={styles.quantidadeButton} onPress={() => decrementProduct(item.id)}>
+            <Text style={styles.quantidadeButtonText}>-</Text>
+          </TouchableOpacity>
+          <Text style={styles.quantidadeText}>{item.quantity || 1}</Text>
+          <TouchableOpacity style={styles.quantidadeButton} onPress={() => incrementProduct(item.id)}>
+            <Text style={styles.quantidadeButtonText}>+</Text>
+          </TouchableOpacity>
+        </View>
+        <TouchableOpacity style={styles.removerButton} onPress={() => removerProduto(item.id)}>
+          <Text style={styles.removerButtonText}>Excluir</Text>
         </TouchableOpacity>
       </View>
-      <TouchableOpacity style={styles.removerButton} onPress={() => removerProduto(item.id)}>
-        <Text style={styles.removerButtonText}>Excluir</Text>
-      </TouchableOpacity>
-    </View>
-  );
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -53,11 +60,31 @@ const Carrinho = ({ navigation }) => {
         keyExtractor={(item) => item.id.toString()}
       />
       {cartItems.length === 0 && <Text style={styles.emptyText}>Carrinho vazio!</Text>}
-      
+
+      {/* Linha divisória */}
+      <View style={styles.line} />
+
+      {/* Valor total e botão de pagamento */}
+      <View style={styles.totalButtonContainer}>
+        <View style={styles.totalContainer}>
+          <Text style={styles.totalLabel}>Valor total:</Text>
+          <Text style={styles.totalValue}>
+            R$ {getTotalPrice() ? getTotalPrice().toFixed(2) : '0.00'}
+          </Text>
+        </View>
+
+        <TouchableOpacity
+          style={styles.pagarButton}
+          onPress={() => navigation.navigate('Pagamento')}
+        >
+          <Text style={styles.pagarButtonText}>Ir para o Pagamento</Text>
+        </TouchableOpacity>
+      </View>
+
       {/* Nav Bar */}
       <View style={styles.navBar}>
-        <TouchableOpacity 
-          style={styles.navItem} 
+        <TouchableOpacity
+          style={styles.navItem}
           onPress={() => navigation.navigate('TelaInicial')}
         >
           <View style={styles.navItemContainer}>
@@ -65,8 +92,8 @@ const Carrinho = ({ navigation }) => {
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity 
-          style={styles.navItem} 
+        <TouchableOpacity
+          style={styles.navItem}
           onPress={() => navigation.navigate('Carrinho')}
         >
           <View style={styles.navItemContainer}>
@@ -74,8 +101,8 @@ const Carrinho = ({ navigation }) => {
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity 
-          style={styles.navItem} 
+        <TouchableOpacity
+          style={styles.navItem}
           onPress={() => navigation.navigate('Pagamento')}
         >
           <View style={styles.navItemContainer}>
@@ -83,8 +110,8 @@ const Carrinho = ({ navigation }) => {
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity 
-          style={styles.navItem} 
+        <TouchableOpacity
+          style={styles.navItem}
           onPress={() => navigation.navigate('Validação')}
         >
           <View style={styles.navItemContainer}>
@@ -153,6 +180,48 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#888',
   },
+  line: {
+    width: 350,
+    height: 0,
+    borderTopWidth: 1,
+    borderTopColor: '#E3E3E3',
+    marginVertical: 15,
+    alignSelf: 'center',
+  },
+  totalButtonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 50,
+    marginBottom: 100,
+    paddingHorizontal: 20,
+  },
+  totalContainer: {
+    flexDirection: 'column',
+  },
+  totalLabel: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  totalValue: {
+    fontSize: 18,
+    color: '#000066',
+    fontWeight: 'bold',
+    marginTop: 5,
+  },
+  pagarButton: {
+    backgroundColor: '#000066',
+    borderRadius: 8,
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  pagarButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
   navBar: {
     position: 'absolute',
     bottom: 0,
@@ -166,12 +235,11 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     elevation: 5,
-  }, 
-  
+  },
   navItem: {
     alignItems: 'center',
     position: 'relative',
-    width: 60, 
+    width: 60,
     marginBottom: 10,
   },
 });
