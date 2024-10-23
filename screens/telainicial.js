@@ -9,20 +9,20 @@ import { useFocusEffect } from '@react-navigation/native';
 const products = [
   { id: 1, name: 'Café', price: 3.00, category: 'Bebidas', image: require('../assets/Cafe.png') },
   { id: 2, name: 'Refrigerante', price: 4.50, category: 'Bebidas', image: require('../assets/refri.png') },
-  { id: 3, name: 'Bolo', price: 6.00, category: 'Comidas', image: require('../assets/Cafe.png') },
+  { id: 3, name: 'Bolo/fatia', price: 6.00, category: 'Comidas', image: require('../assets/bolo.png') },
   { id: 4, name: 'Suco', price: 5.00, category: 'Bebidas', image: require('../assets/suco.png') },
   { id: 5, name: 'Tip-top', price: 2.50, category: 'Bebidas', image: require('../assets/tip-top.png') },
   { id: 6, name: 'Salgado', price: 4.00, category: 'Comidas', image: require('../assets/salgado.png') },
-  { id: 7, name: 'Suco e salgado', price: 9.00, category: 'Combos', image: require('../assets/salgado+suco.png') },
-  { id: 8, name: 'Refrigerante e salgado', price: 8.50, category: 'Combos', image: require('../assets/salgado+refri.png') },
-  { id: 9, name: 'Suco e Refrigerante', price: 9.50, category: 'Combos', image: require('../assets/suco+refri.png') },
-  { id: 10, name: 'Refrigerante e Salgado', price: 8.00, category: 'Combos', image: require('../assets/salgado+refri.png') },
-  { id: 12, name: 'Halls', price: 1.50, category: 'Outros', image: require('../assets/halls.png') },
-  { id: 13, name: 'Produto', price: 8.50, category: 'Outros', image: require('../assets/fundo.png') },
+  { id: 7, name: 'Halls', price: 1.50, category: 'Outros', image: require('../assets/halls.png') },
+  { id: 8, name: 'Suco e salgado', price: 9.00, category: 'Combos', image: require('../assets/salgado+suco.png') },
+  { id: 9, name: 'Refrigerante e salgado', price: 8.50, category: 'Combos', image: require('../assets/salgado+refri.png') },
+  { id: 10, name: 'Suco e Refrigerante', price: 9.50, category: 'Combos', image: require('../assets/suco+refri.png') },
+  { id: 11, name: 'Refrigerante e Salgado', price: 8.00, category: 'Combos', image: require('../assets/salgado+refri.png') },
+  { id: 12, name: 'Café e Salgado', price: 8.50, category: 'Combos', image: require('../assets/salgado+cafe.png') },
+  { id: 13, name: 'Bolo e Café', price: 8.50, category: 'Combos', image: require('../assets/bolo+cafe.png') },
   { id: 14, name: 'Produto', price: 8.50, category: 'Outros', image: require('../assets/fundo.png') },
   { id: 15, name: 'Produto', price: 8.50, category: 'Outros', image: require('../assets/fundo.png') },
   { id: 16, name: 'Produto', price: 8.50, category: 'Outros', image: require('../assets/fundo.png') },
-  { id: 17, name: 'Produto', price: 8.50, category: 'Outros', image: require('../assets/fundo.png') },
 
 ];
 
