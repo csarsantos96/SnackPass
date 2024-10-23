@@ -9,13 +9,11 @@ const PaymentScreen = ({ navigation }) => {
   const { cartItems, getTotalPrice } = useCart();
   const [selectedPayment, setSelectedPayment] = useState('card');
 
-  
-
   const renderCartItem = ({ item }) => (
     <View style={styles.cartItemContainer}>
       <Text style={styles.cartItemName}>{item.name}</Text>
-      <Text style={styles.cartItemPrice}>Preço: R$ {item.price ? item.price.toFixed(2) : '0.00'}</Text>
-      <Text style={styles.cartItemQuantity}> {item.quantity ? item.quantity : '0'}</Text>
+      <Text style={styles.cartItemPrice}>R$ {item.price ? item.price.toFixed(2) : '0.00'}</Text>
+      <Text style={styles.cartItemQuantity}>{item.quantity ? item.quantity : '0'}</Text>
     </View>
   );
 
@@ -68,11 +66,13 @@ const PaymentScreen = ({ navigation }) => {
       {/* Cart Summary */}
       <View style={styles.cartSummaryContainer}>
         <Text style={styles.cartText}>Resumo do Carrinho</Text>
+        
+ 
         <FlatList
           data={cartItems}
           renderItem={renderCartItem}
           keyExtractor={(item) => item.id.toString()}
-          style={styles.scrollView} // Remova o ScrollView aqui
+          style={styles.scrollView}
         />
       </View>
 
@@ -86,7 +86,7 @@ const PaymentScreen = ({ navigation }) => {
       </View>
 
       {/* Payment Button */}
-      <TouchableOpacity style={styles.payButton}>
+      <TouchableOpacity style={styles.payButton} onPress={() => navigation.navigate('Validação')}>
         <Text style={styles.payText}>Pagar</Text>
       </TouchableOpacity>
 
@@ -170,6 +170,18 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 8,
   },
+  cartTableHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+  },
+  cartTableHeaderText: {
+    fontWeight: 'bold',
+    flex: 1,
+    textAlign: 'center',
+  },
   cartItemContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -178,17 +190,16 @@ const styles = StyleSheet.create({
     borderBottomColor: '#ccc',
   },
   cartItemName: {
-    fontSize: 14,
+    flex: 1,
+    textAlign: 'left',
   },
   cartItemPrice: {
-    fontSize: 13,
-    color: '#666',
-    marginBottom: 4,
+    flex: 1,
+    textAlign: 'center',
   },
   cartItemQuantity: {
-    fontSize: 10,
-    fontWeight: 'bold',
-    color: '#666',
+    flex: 1,
+    textAlign: 'center',
   },
   totalPriceContainer: {
     flexDirection: 'row',
@@ -210,15 +221,15 @@ const styles = StyleSheet.create({
   },
   payButton: {
     backgroundColor: '#000066',
-    borderRadius: 8,
-    padding: 12,
+    borderRadius: 12,
+    padding: 10,
+    marginTop: 16,
     alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 20,
   },
   payText: {
     color: '#FFFFFF',
-    fontWeight: '600',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   navBar: {
     position: 'absolute',
@@ -235,8 +246,10 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   navItem: {
-    flex: 1,
     alignItems: 'center',
+    position: 'relative',
+    width: 60,
+    marginBottom: 10,
   },
 });
 
