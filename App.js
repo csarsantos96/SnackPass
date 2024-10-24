@@ -2,17 +2,20 @@ import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, Image, TouchableOpacity, Text, ActivityIndicator } from 'react-native'; 
 import { LinearGradient } from 'expo-linear-gradient';
+import { SvgUri } from 'react-native-svg';
 import logo from './assets/logo.png'; 
 import ellipse2 from './assets/ellipse2.png'; 
+import alunos from './assets/alunos.png';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import EsqueciSenha from './screens/EsqueciSenha';
 import AlunoScreen from './screens/aluno'; 
 import FuncionarioScreen from './screens/func'; 
 import TelaInicial from './screens/telainicial'; 
 import Carrinho from './screens/carrinho'; 
 import Pagamento from './screens/pagamento'; 
 import LoadingScreen from './screens/LoadingScreen';
-import Validacao from './screens/validacao'; // Corrigido para o nome correto
+import Validacao from './screens/validacao'; 
 import Login from './login'; 
 import Index from './index'; 
 import { CartProvider } from './context/CartContext';
@@ -24,6 +27,7 @@ const Stack = createNativeStackNavigator();
 const HomeScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
+      <Image source={alunos} style={styles.alunosImage} />
       <Image source={ellipse2} style={styles.ellipse2} />
       <LinearGradient
         colors={['rgba(202, 146, 123, 0)', 'rgba(4, 0, 51, 0.14)']}
@@ -58,13 +62,13 @@ export default function App() {
           <Stack.Navigator initialRouteName="Home">
           <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
           <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
+          <Stack.Screen name="EsqueciSenha" component={EsqueciSenha} options={{ headerShown: false }} />
           <Stack.Screen name="Index" component={Index} options={{ headerShown: false }} />
           <Stack.Screen name="Aluno" component={CadastroScreen} />
           <Stack.Screen name="Funcionário" component={FuncionarioScreen} />
-          <Stack.Screen name="TelaInicial" component={TelaInicial} />
+          <Stack.Screen name="TelaInicial" component={TelaInicial} options={{ headerShown: false }}/>
           <Stack.Screen name="Carrinho" component={Carrinho} />
           <Stack.Screen name="Pagamento" component={Pagamento} /> 
-    { /*   <Stack.Screen name="Loading" component={LoadingScreen} /> */}
           <Stack.Screen name="Validação" component={Validacao} />
         </Stack.Navigator>
       </NavigationContainer>
@@ -91,6 +95,15 @@ const styles = StyleSheet.create({
     marginTop: '95%', 
     alignSelf: 'center',
     width: '100%',
+  },
+  alunosImage: {
+    marginBottom: '10%', 
+    width: 387, 
+    height: 412, 
+    alignSelf: 'center',
+    position: 'absolute', 
+    bottom: 250, 
+    zIndex: 1, 
   },
   buttonContainer: {
     flex: 1, 
