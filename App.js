@@ -15,7 +15,8 @@ import Validacao from './screens/validacao'; // Corrigido para o nome correto
 import Login from './login'; 
 import Index from './index'; 
 import { CartProvider } from './context/CartContext';
-import { useFonts } from 'expo-font'; 
+import { useFonts } from 'expo-font';
+import CadastroScreen from "./screens/aluno";
 
 const Stack = createNativeStackNavigator();
 
@@ -31,7 +32,7 @@ const HomeScreen = ({ navigation }) => {
         <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Login')}>
           <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Index')}>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Aluno')}>
           <Text style={styles.buttonText}>Cadastrar-se</Text>
         </TouchableOpacity>
       </View>
@@ -57,7 +58,7 @@ export default function App() {
           <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
           <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
           <Stack.Screen name="Index" component={Index} options={{ headerShown: false }} />
-          <Stack.Screen name="Aluno" component={AlunoScreen} />
+          <Stack.Screen name="Aluno" component={CadastroScreen} />
           <Stack.Screen name="Funcionário" component={FuncionarioScreen} />
           <Stack.Screen name="TelaInicial" component={TelaInicial} />
           <Stack.Screen name="Carrinho" component={Carrinho} />
