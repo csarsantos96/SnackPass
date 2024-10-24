@@ -6,15 +6,14 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 
 const Validacao = ({ navigation, route }) => {
   const { produtos } = route.params || {};
-  console.log(produtos); // Verifique os dados recebidos
+  console.log(produtos); 
 
   const renderItem = ({ item }) => (
-    <View style={styles.productContainer}>
-      <Image source={{ uri: item.imagem }} style={styles.productImage} />
-      <View style={styles.productDetails}>
-        <Text style={styles.productName}>{item.nome || 'Nome não disponível'}</Text>
-        <Text style={styles.productPrice}>R$ {item.price ? item.price.toFixed(2) : '0.00'}</Text>
-      </View>
+    <View style={styles.cartItemContainer}>
+      <Image source={item.image} style={styles.cartItemImage} /> 
+      <Text style={styles.cartItemName}>{item.name}</Text>
+      <Text style={styles.cartItemPrice}>R$ {item.price ? item.price.toFixed(2) : '0.00'}</Text>
+      <Text style={styles.cartItemQuantity}>{item.quantity ? item.quantity : '0'}</Text>
       <TouchableOpacity 
         style={styles.arrowButton} 
         onPress={() => navigation.navigate('Ticket')}
@@ -31,7 +30,7 @@ const Validacao = ({ navigation, route }) => {
       <FlatList 
         data={produtos}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id.toString()} 
+        keyExtractor={(item) => item.id.toString()} // Certifique-se de que cada produto tem um ID único
       />
 
       <View style={styles.navBar}>
@@ -79,34 +78,45 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+    backgroundColor: '#F9F9F9', // Adicionando uma cor de fundo
   },
   titulo: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
+    textAlign: 'center', // Centralizando o título
   },
-  productContainer: {
+  cartItemContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#D3D3D3',
+    padding: 15,
+    marginVertical: 5,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 8,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 1 },
+    shadowRadius: 2,
+    elevation: 2,
   },
-  productImage: {
-    width: 50,
-    height: 50,
-    marginRight: 10,
+  cartItemImage: {
+    width: 60,
+    height: 60,
+    marginRight: 15,
+    borderRadius: 5, // Adicionando bordas arredondadas às imagens
   },
-  productDetails: {
+  cartItemName: {
+    fontSize: 16,
     flex: 1,
   },
-  productName: {
+  cartItemPrice: {
     fontSize: 16,
-    
+    color: '#333',
+    marginHorizontal: 10,
   },
-  productPrice: {
-    fontSize: 14,
-    color: '#6A6A6A',
+  cartItemQuantity: {
+    fontSize: 16,
+    color: '#888',
   },
   arrowButton: {
     padding: 10,
@@ -124,12 +134,14 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     elevation: 5,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: -1 },
+    shadowRadius: 2,
   },
   navItem: {
     alignItems: 'center',
-    position: 'relative',
-    width: 60, 
-    marginBottom: 10,
+    width: 60,
   },
 });
 

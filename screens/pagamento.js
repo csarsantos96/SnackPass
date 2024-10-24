@@ -174,13 +174,13 @@ const styles = StyleSheet.create({
   cartText: {
     fontSize: 16,
     fontWeight: 'bold',
-    marginBottom: 8,
+    marginBottom: 5,
   },
   cartItemContainer: {
     flexDirection: 'row',
     alignItems: 'center', // Adicionando alinhamento vertical
     justifyContent: 'space-between',
-    padding: 10,
+    padding: 8,
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
   },
