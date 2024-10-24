@@ -263,65 +263,64 @@ const CadastroScreen = () => {
 const styles = StyleSheet.create({
     screenContainer: {
         flexGrow: 1,
-        justifyContent: 'center',
         padding: 20,
-        backgroundColor: '#f9f9f9', // Cor de fundo para o ScrollView
     },
     title: {
         fontSize: 24,
         fontWeight: 'bold',
-        textAlign: 'center',
         marginBottom: 20,
+        textAlign: 'center',
     },
     input: {
-        height: 50,
-        borderColor: '#ccc',
+        height: 40,
+        borderColor: '#CCCCCC',
         borderWidth: 1,
-        borderRadius: 5,
-        marginBottom: 15,
-        paddingHorizontal: 10,
-        backgroundColor: '#fff', // Cor de fundo para os inputs
-    },
-    button: {
-        backgroundColor: '#007BFF', // Cor do botão
-        padding: 15,
-        borderRadius: 5,
-        alignItems: 'center',
-    },
-    buttonText: {
-        color: '#fff',
-        fontSize: 16,
-        fontWeight: 'bold',
+        marginBottom: 10,
+        paddingLeft: 10,
     },
     switchContainer: {
         flexDirection: 'row',
-        justifyContent: 'space-around',
+        justifyContent: 'center',
         marginBottom: 20,
     },
     switchButton: {
         padding: 10,
-        borderWidth: 1,
-        borderColor: '#007BFF',
-        borderRadius: 5,
-        flex: 1,
-        alignItems: 'center',
+        borderBottomWidth: 2,
+        borderBottomColor: '#CCCCCC',
     },
     activeButton: {
-        backgroundColor: '#007BFF',
+        borderBottomColor: '#000066',
     },
     switchText: {
-        color: '#007BFF',
+        fontSize: 16,
+        fontWeight: 'bold',
     },
     activeText: {
-        color: '#fff',
+        color: '#000066',
     },
     checkboxLabel: {
-        fontSize: 16,
-        marginVertical: 10,
+        fontWeight: 'bold',
+        marginTop: 10,
+        marginBottom: 5,
     },
     checkboxContainer: {
-        marginVertical: 5,
+        flexDirection: 'row',
+        alignItems: 'center',
     },
+    button: {
+        backgroundColor: '#000066',
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        marginTop: 20,
+        alignItems: 'center',
+        borderRadius: 5
+    },
+    buttonText: {
+        color: '#FFFFFF',
+        textAlign: 'center',
+        fontWeight: 'bold',
+    },
+
 });
 
 
