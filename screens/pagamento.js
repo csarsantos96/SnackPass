@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, FlatList, Image } from 'react-native';
 import { useCart } from '../context/CartContext';
 import { FontAwesome } from '@expo/vector-icons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
@@ -8,14 +8,18 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 const PaymentScreen = ({ navigation }) => {
   const { cartItems, getTotalPrice } = useCart();
   const [selectedPayment, setSelectedPayment] = useState('card');
+  console.log(cartItems);
+
 
   const renderCartItem = ({ item }) => (
     <View style={styles.cartItemContainer}>
+      <Image source={item.image} style={styles.cartItemImage} /> 
       <Text style={styles.cartItemName}>{item.name}</Text>
       <Text style={styles.cartItemPrice}>R$ {item.price ? item.price.toFixed(2) : '0.00'}</Text>
       <Text style={styles.cartItemQuantity}>{item.quantity ? item.quantity : '0'}</Text>
     </View>
   );
+  
 
   return (
     <View style={styles.container}>
@@ -67,7 +71,6 @@ const PaymentScreen = ({ navigation }) => {
       <View style={styles.cartSummaryContainer}>
         <Text style={styles.cartText}>Resumo do Carrinho</Text>
         
- 
         <FlatList
           data={cartItems}
           renderItem={renderCartItem}
@@ -86,11 +89,14 @@ const PaymentScreen = ({ navigation }) => {
       </View>
 
       {/* Payment Button */}
-      <TouchableOpacity style={styles.payButton} onPress={() => navigation.navigate('Validação')}>
+      <TouchableOpacity
+        style={styles.payButton}
+        onPress={() => navigation.navigate('Validação', { produtos: cartItems })} 
+      >
         <Text style={styles.payText}>Pagar</Text>
       </TouchableOpacity>
 
-      {/* Nav Bar */}
+   
       <View style={styles.navBar}>
         <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('TelaInicial')}>
           <FontAwesome6 name="house" size={20} color={'#A2A2A2'} />
@@ -170,24 +176,18 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 8,
   },
-  cartTableHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingVertical: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-  },
-  cartTableHeaderText: {
-    fontWeight: 'bold',
-    flex: 1,
-    textAlign: 'center',
-  },
   cartItemContainer: {
     flexDirection: 'row',
+    alignItems: 'center', // Adicionando alinhamento vertical
     justifyContent: 'space-between',
     padding: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
+  },
+  cartItemImage: {
+    width: 50, // Largura da imagem
+    height: 50, // Altura da imagem
+    marginRight: 10, // Espaçamento entre a imagem e o texto
   },
   cartItemName: {
     flex: 1,
@@ -247,9 +247,6 @@ const styles = StyleSheet.create({
   },
   navItem: {
     alignItems: 'center',
-    position: 'relative',
-    width: 60,
-    marginBottom: 10,
   },
 });
 

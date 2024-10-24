@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, TextInput, TouchableOpacity} from 'react-native';
+import { StyleSheet, View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { CheckBox } from 'react-native-elements';
 import { StatusBar } from 'expo-status-bar';
 
 const Login = ({ navigation }) => {
-  const [isSelected, setSelection] = useState(false); // Estado para o checkbox
+  const [isSelected, setSelection] = useState(false); 
 
   return (
     <View style={styles.container}>
@@ -18,6 +18,8 @@ const Login = ({ navigation }) => {
           title="Lembrar-me"
           checked={isSelected}
           onPress={() => setSelection(!isSelected)}
+          containerStyle={styles.checkboxContainer} 
+          textStyle={styles.checkboxText} 
         />
         <TouchableOpacity onPress={() => navigation.navigate('EsqueciSenha')}>
           <Text style={styles.forgotPasswordText}>Esqueci a senha</Text>
@@ -30,8 +32,6 @@ const Login = ({ navigation }) => {
     </View>
   );
 };
-
-
 
 const styles = StyleSheet.create({
   container: {
@@ -56,17 +56,22 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 15,
   },
-  checkbox: {
-    alignSelf: 'center',
+  checkboxContainer: {
+    backgroundColor: 'transparent', 
+    borderWidth: 0, 
+    alignSelf: 'flex-start', 
   },
-  rememberMeText: {
-    marginLeft: 10,
+  checkboxText: {
+    color: '#000000', 
+    fontWeight: 'bold',
+    color:'#000066' , 
   },
   forgotPasswordText: {
     color: '#000066',
     textDecorationLine: 'underline',
+    marginRight: 20,
   },
   button: {
     backgroundColor: '#000066',
@@ -81,4 +86,3 @@ const styles = StyleSheet.create({
 });
 
 export default Login;
-

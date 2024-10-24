@@ -21,9 +21,6 @@ const products = [
   { id: 12, name: 'Café e Salgado', price: 8.50, category: 'Combos', image: require('../assets/salgado+cafe.png') },
   { id: 13, name: 'Bolo e Café', price: 8.50, category: 'Combos', image: require('../assets/bolo+cafe.png') },
   { id: 14, name: 'Produto', price: 8.50, category: 'Outros', image: require('../assets/fundo.png') },
-  { id: 15, name: 'Produto', price: 8.50, category: 'Outros', image: require('../assets/fundo.png') },
-  { id: 16, name: 'Produto', price: 8.50, category: 'Outros', image: require('../assets/fundo.png') },
-
 ];
 
 const TelaInicial = ({ navigation }) => {
