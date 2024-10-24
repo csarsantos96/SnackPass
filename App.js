@@ -11,6 +11,7 @@ import FuncionarioScreen from './screens/func';
 import TelaInicial from './screens/telainicial'; 
 import Carrinho from './screens/carrinho'; 
 import Pagamento from './screens/pagamento'; 
+import LoadingScreen from './screens/LoadingScreen';
 import Validacao from './screens/validacao'; // Corrigido para o nome correto
 import Login from './login'; 
 import Index from './index'; 
@@ -63,6 +64,7 @@ export default function App() {
           <Stack.Screen name="TelaInicial" component={TelaInicial} />
           <Stack.Screen name="Carrinho" component={Carrinho} />
           <Stack.Screen name="Pagamento" component={Pagamento} /> 
+    { /*   <Stack.Screen name="Loading" component={LoadingScreen} /> */}
           <Stack.Screen name="Validação" component={Validacao} />
         </Stack.Navigator>
       </NavigationContainer>

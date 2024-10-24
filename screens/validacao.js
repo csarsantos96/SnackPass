@@ -8,9 +8,9 @@ const Validacao = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.titulo}>Tela de Validação</Text>
-      {/* Adicione seu conteúdo aqui */}
+      
 
-      {/* Nav Bar */}
+      
       <View style={styles.navBar}>
         <TouchableOpacity 
           style={styles.navItem} 

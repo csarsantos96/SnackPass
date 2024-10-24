@@ -8,6 +8,10 @@ export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
 
   const addToCart = (product) => {
+    if (!product.price) {
+      console.error('Produto adicionado sem preço:', product);
+      return; // Ignora produtos sem preço
+    }
     setCartItems((prevItems) => {
       const found = prevItems.find((item) => item.id === product.id);
       if (found) {
@@ -42,8 +46,24 @@ export const CartProvider = ({ children }) => {
     );
   };
 
+  const getTotalPrice = () => {
+    return cartItems.reduce(
+      (total, item) => total + (item.price || 0) * item.quantity, 
+      0
+    );
+  };
+
   return (
-    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, incrementProduct, decrementProduct }}>
+    <CartContext.Provider
+      value={{
+        cartItems,
+        addToCart,
+        removeFromCart,
+        incrementProduct,
+        decrementProduct,
+        getTotalPrice,
+      }}
+    >
       {children}
     </CartContext.Provider>
   );
