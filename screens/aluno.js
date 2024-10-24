@@ -18,6 +18,7 @@ const CadastroScreen = () => {
     const [selectedLevel, setSelectedLevel] = useState(null);
     const [selectedService, setSelectedService] = useState(null);
     const [isStudent, setIsStudent] = useState(true); // Estado para alternar entre Aluno e Funcionário
+    const [loading, setLoading] = useState(false); // Estado para o carregamento
 
     const handleCheckboxChange = (value, type) => {
         if (type === 'student') {
@@ -47,14 +48,50 @@ const CadastroScreen = () => {
         return true;
     };
 
+    const criarConta = async () => {
+        try {
+            const response = await fetch('http://<seu-endereço-ip>:5000/criar-conta', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: email,
+                    senha: password, // Usando o estado da senha
+                    tipo: isStudent ? 'aluno' : 'funcionario', // Determina o tipo com base na seleção
+                    nome: fullName,
+                    data_nascimento: birthDate,
+                    telefone: phone,
+                    cpf: cpf,
+                    matricula: isStudent ? matricula : undefined // Inclui matrícula apenas se for aluno
+                }),
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                Alert.alert('Sucesso', 'Conta criada com sucesso!');
+                navigation.navigate('TelaInicial'); // Navega após sucesso
+            } else {
+                Alert.alert('Erro', data.message);
+            }
+        } catch (error) {
+            console.error('Erro na requisição:', error);
+            Alert.alert('Erro', 'Erro na requisição.');
+        }
+    };
+
     // Validar o formato do email
     const isValidEmail = (email) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(email);
     };
 
-    const handleSubmit = () => {
-        // Validação de senha
+    const handleSubmit = async () => {
+        if (!fullName || !phone) {
+            Alert.alert('Erro', 'Todos os campos são obrigatórios.');
+            return;
+        }
+
         if (password !== confirmPassword) {
             Alert.alert('Erro', 'As senhas não conferem. Por favor, verifique.');
             return;
@@ -72,20 +109,13 @@ const CadastroScreen = () => {
             return;
         }
 
-        console.log("Nome Completo:", fullName);
-        console.log("Data de Nascimento:", birthDate);
-        console.log("Telefone:", phone);
-        console.log("Email:", email);
-        console.log("CPF:", cpf);
+        setLoading(true); // Inicia o carregamento
 
-        if (isStudent) {
-            console.log("Matrícula:", matricula);
-            console.log("Nível de Ensino Selecionado:", selectedLevel);
-        } else {
-            console.log("Serviço Selecionado:", selectedService);
+        try {
+            await criarConta(); // Chama a função para criar a conta
+        } finally {
+            setLoading(false); // Finaliza o carregamento
         }
-
-        navigation.navigate('TelaInicial');
     };
 
     const [fontsLoaded] = useFonts({
@@ -208,19 +238,23 @@ const CadastroScreen = () => {
                 <>
                     <Text style={styles.checkboxLabel}>Serviço:</Text>
                     <View style={styles.checkboxContainer}>
-                        <CheckBox title='Serviços Gerais' checked={selectedService === 'servicosGerais'} onPress={() => handleCheckboxChange('servicosGerais', 'service')} />
+                        <CheckBox title='Direção e Coordenação Pedagógica' checked={selectedService === 'coordenacao'} onPress={() => handleCheckboxChange('coordenacao', 'employee')} />
                     </View>
                     <View style={styles.checkboxContainer}>
-                        <CheckBox title='Auxiliar Administrativo' checked={selectedService === 'auxiliarAdministrativo'} onPress={() => handleCheckboxChange('auxiliarAdministrativo', 'service')} />
+                        <CheckBox title='Administrativo' checked={selectedService === 'recepcao'} onPress={() => handleCheckboxChange('recepcao', 'employee')} />
                     </View>
                     <View style={styles.checkboxContainer}>
-                        <CheckBox title='Coordenação Pedagógica' checked={selectedService === 'coordenacaoPedagogica'} onPress={() => handleCheckboxChange('coordenacaoPedagogica', 'service')} />
+                        <CheckBox title='Serviços Gerais' checked={selectedService === 'servicosGerais'} onPress={() => handleCheckboxChange('servicosGerais', 'employee')} />
+                    </View>
+                    <View style={styles.checkboxContainer}>
+                        <CheckBox title='Professor' checked={selectedService === 'professor'} onPress={() => handleCheckboxChange('professor', 'employee')} />
                     </View>
                 </>
             )}
 
-            <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-                <Text style={styles.buttonText}>Enviar</Text>
+            {/* Botão de enviar */}
+            <TouchableOpacity style={styles.button} onPress={handleSubmit} disabled={loading}>
+                <Text style={styles.buttonText}>{loading ? 'Enviando...' : 'Enviar'}</Text>
             </TouchableOpacity>
         </ScrollView>
     );
@@ -229,62 +263,66 @@ const CadastroScreen = () => {
 const styles = StyleSheet.create({
     screenContainer: {
         flexGrow: 1,
+        justifyContent: 'center',
         padding: 20,
+        backgroundColor: '#f9f9f9', // Cor de fundo para o ScrollView
     },
     title: {
         fontSize: 24,
         fontWeight: 'bold',
-        marginBottom: 20,
         textAlign: 'center',
+        marginBottom: 20,
     },
     input: {
-        height: 40,
-        borderColor: '#CCCCCC',
+        height: 50,
+        borderColor: '#ccc',
         borderWidth: 1,
-        marginBottom: 10,
-        paddingLeft: 10,
+        borderRadius: 5,
+        marginBottom: 15,
+        paddingHorizontal: 10,
+        backgroundColor: '#fff', // Cor de fundo para os inputs
+    },
+    button: {
+        backgroundColor: '#007BFF', // Cor do botão
+        padding: 15,
+        borderRadius: 5,
+        alignItems: 'center',
+    },
+    buttonText: {
+        color: '#fff',
+        fontSize: 16,
+        fontWeight: 'bold',
     },
     switchContainer: {
         flexDirection: 'row',
-        justifyContent: 'center',
+        justifyContent: 'space-around',
         marginBottom: 20,
     },
     switchButton: {
         padding: 10,
-        borderBottomWidth: 2,
-        borderBottomColor: '#CCCCCC',
+        borderWidth: 1,
+        borderColor: '#007BFF',
+        borderRadius: 5,
+        flex: 1,
+        alignItems: 'center',
     },
     activeButton: {
-        borderBottomColor: '#000',
+        backgroundColor: '#007BFF',
     },
     switchText: {
-        fontSize: 16,
-        fontWeight: 'bold',
+        color: '#007BFF',
     },
     activeText: {
-        color: '#000',
+        color: '#fff',
     },
     checkboxLabel: {
-        fontWeight: 'bold',
-        marginTop: 10,
-        marginBottom: 5,
+        fontSize: 16,
+        marginVertical: 10,
     },
     checkboxContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    button: {
-        backgroundColor: '#000',
-        paddingVertical: 10,
-        paddingHorizontal: 20,
-        marginTop: 20,
-        alignItems: 'center',
-    },
-    buttonText: {
-        color: '#FFFFFF',
-        textAlign: 'center',
-        fontWeight: 'bold',
+        marginVertical: 5,
     },
 });
+
 
 export default CadastroScreen;
