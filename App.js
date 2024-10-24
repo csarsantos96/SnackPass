@@ -2,11 +2,13 @@ import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, Image, TouchableOpacity, Text, ActivityIndicator } from 'react-native'; 
 import { LinearGradient } from 'expo-linear-gradient';
+import { SvgUri } from 'react-native-svg';
 import logo from './assets/logo.png'; 
 import ellipse2 from './assets/ellipse2.png'; 
 import alunos from './assets/alunos.png';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import EsqueciSenha from './screens/EsqueciSenha';
 import AlunoScreen from './screens/aluno'; 
 import FuncionarioScreen from './screens/func'; 
 import TelaInicial from './screens/telainicial'; 
@@ -59,6 +61,7 @@ export default function App() {
           <Stack.Navigator initialRouteName="Home">
           <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
           <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
+          <Stack.Screen name="EsqueciSenha" component={EsqueciSenha} options={{ headerShown: false }} />
           <Stack.Screen name="Index" component={Index} options={{ headerShown: false }} />
           <Stack.Screen name="Aluno" component={AlunoScreen} />
           <Stack.Screen name="Funcionário" component={FuncionarioScreen} />
