@@ -49,28 +49,39 @@ const CadastroScreen = () => {
     };
 
     const criarConta = async () => {
+        console.log('Enviando dados para a API:', {
+            email: email,
+            senha: password,
+            tipo: isStudent ? 'aluno' : 'funcionario',
+            nome: fullName,
+            data_nascimento: birthDate,
+            telefone: phone,
+            cpf: cpf,
+            matricula: isStudent ? matricula : undefined
+        });
         try {
-            const response = await fetch('http://<seu-endereço-ip>:5000/criar-conta', {
+            const response = await fetch('http://192.168.1.5:5000/criar-conta', { // Substitua pelo seu IP
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
                     email: email,
-                    senha: password, // Usando o estado da senha
-                    tipo: isStudent ? 'aluno' : 'funcionario', // Determina o tipo com base na seleção
+                    senha: password,
+                    tipo: isStudent ? 'aluno' : 'funcionario',
                     nome: fullName,
                     data_nascimento: birthDate,
                     telefone: phone,
                     cpf: cpf,
-                    matricula: isStudent ? matricula : undefined // Inclui matrícula apenas se for aluno
+                    matricula: isStudent ? matricula : undefined
                 }),
             });
 
             const data = await response.json();
+            console.log('Resposta da API:', data); // Log da resposta da API
             if (response.ok) {
                 Alert.alert('Sucesso', 'Conta criada com sucesso!');
-                navigation.navigate('TelaInicial'); // Navega após sucesso
+                navigation.navigate('TelaInicial');
             } else {
                 Alert.alert('Erro', data.message);
             }
@@ -80,7 +91,6 @@ const CadastroScreen = () => {
         }
     };
 
-    // Validar o formato do email
     const isValidEmail = (email) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(email);
@@ -322,6 +332,5 @@ const styles = StyleSheet.create({
     },
 
 });
-
 
 export default CadastroScreen;
