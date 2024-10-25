@@ -16,6 +16,7 @@ import Carrinho from './screens/carrinho';
 import Pagamento from './screens/pagamento'; 
 import LoadingScreen from './screens/LoadingScreen';
 import Validacao from './screens/validacao'; 
+import Ticket from './screens/ticket';
 import Login from './login'; 
 import Index from './index'; 
 import { CartProvider } from './context/CartContext';
@@ -70,6 +71,7 @@ export default function App() {
           <Stack.Screen name="Carrinho" component={Carrinho} />
           <Stack.Screen name="Pagamento" component={Pagamento} /> 
           <Stack.Screen name="Validação" component={Validacao} />
+          <Stack.Screen name="Ticket" component={Ticket} /> 
         </Stack.Navigator>
       </NavigationContainer>
     </CartProvider>
