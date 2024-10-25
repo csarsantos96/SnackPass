@@ -1,12 +1,37 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image } from 'react-native';
+import React, { useState } from 'react';
+import {View, Text, StyleSheet, TouchableOpacity, FlatList, Image, handleProductValidation } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 const Validacao = ({ navigation, route }) => {
   const { produtos } = route.params || {};
-  console.log(produtos); 
+  
+
+  const [produtosComValidacao, setProdutosComValidacao] = useState(produtos);
+
+
+  const handleProductValidation = (productId, quantity) => {
+    console.log(`Produto ${productId} validado com quantidade ${quantity}`);
+
+    setProdutosComValidacao((prevProdutos) => 
+      prevProdutos.map((produto) => {
+        if (produto.id === productId) {
+          const updatedQuantity = produto.quantity - quantity; // Definindo updatedQuantity aqui
+          return {
+            ...produto,
+            validated: true, 
+            quantity: updatedQuantity > 0 ? updatedQuantity : 0, 
+          };
+        }
+        return produto;
+      })
+    );
+  };
+
+  const produtosPendentes = produtosComValidacao.filter((item) => !item.validated);
+  const produtosValidados = produtosComValidacao.filter((item) => item.validated);
+
 
   const renderItem = ({ item }) => (
     <View style={styles.cartItemContainer}>
@@ -16,8 +41,10 @@ const Validacao = ({ navigation, route }) => {
       <Text style={styles.cartItemQuantity}>{item.quantity ? item.quantity : '0'}</Text>
       <TouchableOpacity 
         style={styles.arrowButton} 
-        onPress={() => navigation.navigate('Ticket')}
-      >
+        onPress={() => 
+          navigation.navigate('Ticket', { item: item, handleProductValidation })
+        }
+      > 
         <Ionicons name="arrow-forward" size={24} color="#000" />
       </TouchableOpacity>
     </View>
@@ -25,12 +52,21 @@ const Validacao = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.titulo}>Tela de Validação</Text>
-      
+
+      <Text style={styles.sectionTitle}>Produtos Pendentes</Text>
       <FlatList 
-        data={produtos}
+        data={produtosPendentes}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id.toString()} // Certifique-se de que cada produto tem um ID único
+        keyExtractor={(item) => item.id.toString()}
+        style={styles.scrollView}
+      />
+
+      <Text style={styles.sectionTitle}>Produtos Validados</Text>
+      <FlatList 
+        data={produtosValidados}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id.toString()}
+        style={styles.scrollView}
       />
 
       <View style={styles.navBar}>
@@ -78,13 +114,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#F9F9F9', // Adicionando uma cor de fundo
+    backgroundColor: '#F9F9F9',
   },
   titulo: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
-    textAlign: 'center', // Centralizando o título
+    textAlign: 'center',
+  },
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginVertical: 20,
   },
   cartItemContainer: {
     flexDirection: 'row',
@@ -99,11 +140,14 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     elevation: 2,
   },
+  scrollView: {
+    maxHeight: 350,
+  },
   cartItemImage: {
     width: 60,
     height: 60,
     marginRight: 15,
-    borderRadius: 5, // Adicionando bordas arredondadas às imagens
+    borderRadius: 5,
   },
   cartItemName: {
     fontSize: 16,
