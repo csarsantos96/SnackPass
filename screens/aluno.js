@@ -13,12 +13,12 @@ const CadastroScreen = () => {
     const [email, setEmail] = useState('');
     const [cpf, setCpf] = useState('');
     const [matricula, setMatricula] = useState('');
-    const [password, setPassword] = useState(''); // Estado para a senha
-    const [confirmPassword, setConfirmPassword] = useState(''); // Estado para confirmar a senha
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [selectedLevel, setSelectedLevel] = useState(null);
     const [selectedService, setSelectedService] = useState(null);
-    const [isStudent, setIsStudent] = useState(true); // Estado para alternar entre Aluno e Funcionário
-    const [loading, setLoading] = useState(false); // Estado para o carregamento
+    const [isStudent, setIsStudent] = useState(true);
+    const [loading, setLoading] = useState(false);
 
     const handleCheckboxChange = (value, type) => {
         if (type === 'student') {
@@ -30,7 +30,7 @@ const CadastroScreen = () => {
 
     // Validar CPF
     const isValidCpf = (cpf) => {
-        cpf = cpf.replace(/[^\d]+/g, ''); // Remove qualquer coisa que não seja dígito
+        cpf = cpf.replace(/[^\d]+/g, '');
         if (cpf.length !== 11) return false;
 
         let sum = 0, remainder;
@@ -48,6 +48,12 @@ const CadastroScreen = () => {
         return true;
     };
 
+    // Validar Senha
+    const isValidPassword = (password) => {
+        const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        return passwordRegex.test(password);
+    };
+
     const criarConta = async () => {
         console.log('Enviando dados para a API:', {
             email: email,
@@ -57,10 +63,12 @@ const CadastroScreen = () => {
             data_nascimento: birthDate,
             telefone: phone,
             cpf: cpf,
-            matricula: isStudent ? matricula : undefined
+            matricula: isStudent ? matricula : undefined,
+            nivel_ensino: isStudent ? selectedLevel : undefined,
+            servico: !isStudent ? selectedService : undefined
         });
         try {
-            const response = await fetch('http://192.168.1.5:5000/criar-conta', { // Substitua pelo seu IP
+            const response = await fetch('http://192.168.1.5:5000/criar-conta', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -73,21 +81,31 @@ const CadastroScreen = () => {
                     data_nascimento: birthDate,
                     telefone: phone,
                     cpf: cpf,
-                    matricula: isStudent ? matricula : undefined
+                    matricula: isStudent ? matricula : undefined,
+                    nivel_ensino: isStudent ? selectedLevel : undefined,
+                    servico: !isStudent ? selectedService : undefined
                 }),
             });
 
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('Erro na resposta:', errorText);
+                Alert.alert('Erro', `Erro na resposta: ${errorText}`);
+                return;
+            }
+
             const data = await response.json();
-            console.log('Resposta da API:', data); // Log da resposta da API
+            console.log('Resposta da API:', data);
+
             if (response.ok) {
                 Alert.alert('Sucesso', 'Conta criada com sucesso!');
                 navigation.navigate('TelaInicial');
             } else {
-                Alert.alert('Erro', data.message);
+                Alert.alert('Erro', data.message || 'Erro desconhecido.');
             }
         } catch (error) {
             console.error('Erro na requisição:', error);
-            Alert.alert('Erro', 'Erro na requisição.');
+            Alert.alert('Erro', 'Erro na requisição ao servidor.');
         }
     };
 
@@ -107,24 +125,37 @@ const CadastroScreen = () => {
             return;
         }
 
-        // Validação de CPF
+        if (!isValidPassword(password)) {
+            Alert.alert('Erro', 'A senha deve ter no mínimo 8 caracteres, incluindo letras, números e caracteres especiais.');
+            return;
+        }
+
         if (!isValidCpf(cpf)) {
             Alert.alert('Erro', 'CPF inválido. Por favor, insira um CPF válido.');
             return;
         }
 
-        // Validação de email
         if (!isValidEmail(email)) {
             Alert.alert('Erro', 'Email inválido. Por favor, insira um email válido.');
             return;
         }
 
-        setLoading(true); // Inicia o carregamento
+        if (isStudent && !selectedLevel) {
+            Alert.alert('Erro', 'Por favor, selecione o nível de ensino.');
+            return;
+        }
+
+        if (!isStudent && !selectedService) {
+            Alert.alert('Erro', 'Por favor, selecione o serviço.');
+            return;
+        }
+
+        setLoading(true);
 
         try {
-            await criarConta(); // Chama a função para criar a conta
+            await criarConta();
         } finally {
-            setLoading(false); // Finaliza o carregamento
+            setLoading(false);
         }
     };
 
@@ -140,7 +171,6 @@ const CadastroScreen = () => {
         <ScrollView contentContainerStyle={styles.screenContainer}>
             <Text style={styles.title}>Formulário de Cadastro</Text>
 
-            {/* Escolha entre Aluno ou Funcionário */}
             <View style={styles.switchContainer}>
                 <TouchableOpacity onPress={() => setIsStudent(true)} style={[styles.switchButton, isStudent && styles.activeButton]}>
                     <Text style={[styles.switchText, isStudent && styles.activeText]}>Aluno</Text>
@@ -150,7 +180,6 @@ const CadastroScreen = () => {
                 </TouchableOpacity>
             </View>
 
-            {/* Campos comuns */}
             <TextInput
                 style={styles.input}
                 placeholder="Nome Completo"
@@ -197,7 +226,6 @@ const CadastroScreen = () => {
                 keyboardType="numeric"
             />
 
-            {/* Exibir campo de matrícula apenas para alunos */}
             {isStudent && (
                 <TextInputMask
                     type={'custom'}
@@ -211,37 +239,35 @@ const CadastroScreen = () => {
                 />
             )}
 
-            {/* Campos de senha e confirmação */}
             <TextInput
                 style={styles.input}
                 placeholder="Senha"
                 value={password}
                 onChangeText={setPassword}
-                secureTextEntry={true} // Esconde a senha
+                secureTextEntry={true}
             />
             <TextInput
                 style={styles.input}
                 placeholder="Confirmar Senha"
                 value={confirmPassword}
                 onChangeText={setConfirmPassword}
-                secureTextEntry={true} // Esconde a senha
+                secureTextEntry={true}
             />
 
-            {/* Exibir campos específicos com base na escolha */}
             {isStudent ? (
                 <>
                     <Text style={styles.checkboxLabel}>Nível de Ensino:</Text>
                     <View style={styles.checkboxContainer}>
-                        <CheckBox title='Ensino Infantil' checked={selectedLevel === 'infantil'} onPress={() => handleCheckboxChange('infantil', 'student')} />
+                        <CheckBox title='Ensino Infantil' checked={selectedLevel === 'Ensino Infantil'} onPress={() => handleCheckboxChange('Ensino Infantil', 'student')} />
                     </View>
                     <View style={styles.checkboxContainer}>
-                        <CheckBox title='Ensino Fundamental I' checked={selectedLevel === 'fundamentalI'} onPress={() => handleCheckboxChange('fundamentalI', 'student')} />
+                        <CheckBox title='Ensino Fundamental I' checked={selectedLevel === 'Ensino Fundamental I'} onPress={() => handleCheckboxChange('Ensino Fundamental I', 'student')} />
                     </View>
                     <View style={styles.checkboxContainer}>
-                        <CheckBox title='Ensino Fundamental II' checked={selectedLevel === 'fundamentalII'} onPress={() => handleCheckboxChange('fundamentalII', 'student')} />
+                        <CheckBox title='Ensino Fundamental II' checked={selectedLevel === 'Ensino Fundamental II'} onPress={() => handleCheckboxChange('Ensino Fundamental II', 'student')} />
                     </View>
                     <View style={styles.checkboxContainer}>
-                        <CheckBox title='Ensino Médio' checked={selectedLevel === 'medio'} onPress={() => handleCheckboxChange('medio', 'student')} />
+                        <CheckBox title='Ensino Médio' checked={selectedLevel === 'Ensino Médio'} onPress={() => handleCheckboxChange('Ensino Médio', 'student')} />
                     </View>
                 </>
             ) : (
@@ -262,7 +288,6 @@ const CadastroScreen = () => {
                 </>
             )}
 
-            {/* Botão de enviar */}
             <TouchableOpacity style={styles.button} onPress={handleSubmit} disabled={loading}>
                 <Text style={styles.buttonText}>{loading ? 'Enviando...' : 'Enviar'}</Text>
             </TouchableOpacity>

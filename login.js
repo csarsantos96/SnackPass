@@ -1,35 +1,76 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { CheckBox } from 'react-native-elements';
 import { StatusBar } from 'expo-status-bar';
 
 const Login = ({ navigation }) => {
-  const [isSelected, setSelection] = useState(false); 
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isSelected, setSelection] = useState(false);
+
+  const handleLogin = async () => {
+    try {
+      const response = await fetch('http://192.168.1.5:5000/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: email,
+          senha: password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Erro ao realizar login');
+      }
+
+      Alert.alert('Sucesso', 'Login realizado com sucesso!');
+      navigation.navigate('TelaInicial');
+    } catch (error) {
+      console.error('Erro ao realizar login:', error);
+      Alert.alert('Erro', error.message);
+    }
+  };
 
   return (
-    <View style={styles.container}>
-      <StatusBar style="auto" />
-      <Text style={styles.title}>Login</Text>
-      <TextInput style={styles.input} placeholder="Email" keyboardType="email-address" />
-      <TextInput style={styles.input} placeholder="Senha" secureTextEntry />
-      
-      <View style={styles.rememberMeContainer}>
-        <CheckBox
-          title="Lembrar-me"
-          checked={isSelected}
-          onPress={() => setSelection(!isSelected)}
-          containerStyle={styles.checkboxContainer} 
-          textStyle={styles.checkboxText} 
+      <View style={styles.container}>
+        <StatusBar style="auto" />
+        <Text style={styles.title}>Login</Text>
+        <TextInput
+            style={styles.input}
+            placeholder="Email"
+            keyboardType="email-address"
+            value={email}
+            onChangeText={setEmail}
         />
-        <TouchableOpacity onPress={() => navigation.navigate('EsqueciSenha')}>
-          <Text style={styles.forgotPasswordText}>Esqueci a senha</Text>
+        <TextInput
+            style={styles.input}
+            placeholder="Senha"
+            secureTextEntry
+            value={password}
+            onChangeText={setPassword}
+        />
+
+        <View style={styles.rememberMeContainer}>
+          <CheckBox
+              title="Lembrar-me"
+              checked={isSelected}
+              onPress={() => setSelection(!isSelected)}
+              containerStyle={styles.checkboxContainer}
+              textStyle={styles.checkboxText}
+          />
+          <TouchableOpacity onPress={() => navigation.navigate('EsqueciSenha')}>
+            <Text style={styles.forgotPasswordText}>Esqueci a senha</Text>
+          </TouchableOpacity>
+        </View>
+
+        <TouchableOpacity style={styles.button} onPress={handleLogin}>
+          <Text style={styles.buttonText}>Entrar</Text>
         </TouchableOpacity>
       </View>
-
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('TelaInicial')}>
-        <Text style={styles.buttonText}>Entrar</Text>
-      </TouchableOpacity>
-    </View>
   );
 };
 
@@ -59,14 +100,13 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   checkboxContainer: {
-    backgroundColor: 'transparent', 
-    borderWidth: 0, 
-    alignSelf: 'flex-start', 
+    backgroundColor: 'transparent',
+    borderWidth: 0,
+    alignSelf: 'flex-start',
   },
   checkboxText: {
-    color: '#000000', 
     fontWeight: 'bold',
-    color:'#000066' , 
+    color:'#000066' ,
   },
   forgotPasswordText: {
     color: '#000066',
