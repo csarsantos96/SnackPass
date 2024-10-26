@@ -19,6 +19,8 @@ const CadastroScreen = () => {
     const [selectedService, setSelectedService] = useState(null);
     const [isStudent, setIsStudent] = useState(true);
     const [loading, setLoading] = useState(false);
+    const API_URL = 'http://192.168.1.5:5000';
+
 
     const handleCheckboxChange = (value, type) => {
         if (type === 'student') {
@@ -68,7 +70,7 @@ const CadastroScreen = () => {
             servico: !isStudent ? selectedService : undefined
         });
         try {
-            const response = await fetch('http://192.168.1.5:5000/criar-conta', {
+            const response = await fetch(`${API_URL}/criar-conta`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -86,6 +88,7 @@ const CadastroScreen = () => {
                     servico: !isStudent ? selectedService : undefined
                 }),
             });
+
 
             if (!response.ok) {
                 const errorText = await response.text();
@@ -117,6 +120,11 @@ const CadastroScreen = () => {
     const handleSubmit = async () => {
         if (!fullName || !phone) {
             Alert.alert('Erro', 'Todos os campos são obrigatórios.');
+            return;
+        }
+
+        if (matricula.length < 10 || matricula.length > 20) {
+            Alert.alert('Erro', 'A matrícula deve ter entre 10 e 20 caracteres.');
             return;
         }
 
