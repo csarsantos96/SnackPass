@@ -19,7 +19,8 @@ const CadastroScreen = () => {
     const [selectedService, setSelectedService] = useState(null);
     const [isStudent, setIsStudent] = useState(true);
     const [loading, setLoading] = useState(false);
-    const API_URL = 'http://192.168.1.5:5000';
+    const API_URL = 'https://snackpass-api.vercel.app';
+
 
 
     const handleCheckboxChange = (value, type) => {
