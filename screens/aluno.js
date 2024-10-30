@@ -4,6 +4,7 @@ import { CheckBox } from 'react-native-elements';
 import { useFonts } from 'expo-font';
 import { useNavigation } from '@react-navigation/native';
 import { TextInputMask } from 'react-native-masked-text';
+import { API_URL } from '../config'; // Importando a URL da API do config.js
 
 const CadastroScreen = () => {
     const navigation = useNavigation();
@@ -19,9 +20,6 @@ const CadastroScreen = () => {
     const [selectedService, setSelectedService] = useState(null);
     const [isStudent, setIsStudent] = useState(true);
     const [loading, setLoading] = useState(false);
-    const API_URL = 'https://snackpass-api.vercel.app';
-
-
 
     const handleCheckboxChange = (value, type) => {
         if (type === 'student') {
@@ -31,7 +29,6 @@ const CadastroScreen = () => {
         }
     };
 
-    // Validar CPF
     const isValidCpf = (cpf) => {
         cpf = cpf.replace(/[^\d]+/g, '');
         if (cpf.length !== 11) return false;
@@ -51,7 +48,6 @@ const CadastroScreen = () => {
         return true;
     };
 
-    // Validar Senha
     const isValidPassword = (password) => {
         const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
         return passwordRegex.test(password);
@@ -90,7 +86,6 @@ const CadastroScreen = () => {
                 }),
             });
 
-
             if (!response.ok) {
                 const errorText = await response.text();
                 console.error('Erro na resposta:', errorText);
@@ -102,8 +97,7 @@ const CadastroScreen = () => {
             console.log('Resposta da API:', data);
 
             if (response.ok) {
-                Alert.alert('Sucesso', 'Conta criada com sucesso!');
-                navigation.navigate('TelaInicial');
+                navigation.navigate('TelaInicial', { nome: fullName }); // Passa o nome do usuário
             } else {
                 Alert.alert('Erro', data.message || 'Erro desconhecido.');
             }
@@ -364,7 +358,6 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontWeight: 'bold',
     },
-
 });
 
 export default CadastroScreen;

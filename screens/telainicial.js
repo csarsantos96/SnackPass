@@ -6,6 +6,8 @@ import { useFocusEffect } from '@react-navigation/native';
 import { FontAwesome } from '@expo/vector-icons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { API_URL } from '../config';
+
 
 // Mapeamento das imagens dos produtos
 const imageMapping = {
@@ -28,9 +30,11 @@ const imageMapping = {
   'Suco Natural de Maracuja': require('../assets/suco-maracuja.png'),
   'Guaraná Antarctica': require('../assets/guarana.png'),
   'Gatorade': require('../assets/gatorade.png'),
+  // Adicione mais mapeamentos de imagens conforme necessário
 };
 
-const TelaInicial = ({ navigation, userType }) => {
+const TelaInicial = ({ navigation, route }) => {
+  const { nome, userType } = route.params || { nome: 'Usuário', userType: 'aluno' }; // Pega nome e userType dos parâmetros, define padrão se não existir
   const [products, setProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('Todos');
   const { cartItems, addToCart } = useCart();
@@ -39,7 +43,7 @@ const TelaInicial = ({ navigation, userType }) => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('http://192.168.1.5:5000/produtos');
+        const response = await axios.get(`${API_URL}/produtos`);
         setProducts(response.data);
       } catch (error) {
         console.error('Erro ao buscar produtos:', error);
@@ -65,7 +69,7 @@ const TelaInicial = ({ navigation, userType }) => {
   return (
       <View style={styles.container}>
         <View style={styles.topSection}>
-          <Text style={styles.title}>Bem-vindo à Tela Inicial!</Text>
+          <Text style={styles.title}>Bem-vindo(a), {nome}!</Text>
           <TouchableOpacity onPress={() => navigation.navigate('Carrinho')} style={styles.cartButton}>
             <FontAwesome name="shopping-cart" size={24} color="#FFFFFF" />
             <Text style={styles.cartText}> Carrinho ({totalItemsInCart})</Text>
@@ -121,7 +125,7 @@ const TelaInicial = ({ navigation, userType }) => {
           />
         </View>
 
-        {/* Nav Bar */}
+        {/* Barra de Navegação */}
         <View style={styles.navBar}>
           <TouchableOpacity
               style={styles.navItem}
@@ -184,8 +188,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F9F9F9',
   },
-
-  // Top Section
   topSection: {
     flex: 0.5,
     backgroundColor: '#1A1A1A',
@@ -207,8 +209,6 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     marginLeft: 5,
   },
-
-  // Filters Section
   filtersContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -229,8 +229,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
-
-  // Bottom Section
   bottomSection: {
     flex: 1,
     backgroundColor: '#F9F9F9',
@@ -246,13 +244,13 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 10,
     width: '47%',
-    height: 200, // Ajuste a altura para garantir que todos fiquem alinhados
+    height: 200,
   },
   productImage: {
     width: '100%',
     height: 120,
     borderRadius: 8,
-    resizeMode: 'contain', // Ajuste para manter a proporção da imagem
+    resizeMode: 'contain',
   },
   productDetails: {
     marginTop: 5,
@@ -284,8 +282,6 @@ const styles = StyleSheet.create({
     height: 35,
     alignItems: 'center',
   },
-
-  // Nav Bar
   navBar: {
     flexDirection: 'row',
     justifyContent: 'space-around',
@@ -316,6 +312,5 @@ const styles = StyleSheet.create({
     marginLeft: -10,
   },
 });
-
 
 export default TelaInicial;
