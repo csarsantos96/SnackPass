@@ -44,6 +44,7 @@ const TelaInicial = ({ navigation, route }) => {
     const fetchProducts = async () => {
       try {
         const response = await axios.get(`${API_URL}/produtos`);
+        console.log('Dados recebidos da API:', response.data); // Log para verificar se os dados atualizados estão sendo recebidos
         setProducts(response.data);
       } catch (error) {
         console.error('Erro ao buscar produtos:', error);
