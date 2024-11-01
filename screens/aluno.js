@@ -230,15 +230,13 @@ const CadastroScreen = () => {
             />
 
             {isStudent && (
-                <TextInputMask
-                    type={'custom'}
-                    options={{
-                        mask: '9999999'
-                    }}
+                <TextInput
                     style={styles.input}
                     placeholder="Matrícula"
                     value={matricula}
                     onChangeText={setMatricula}
+                    maxLength={20} // Define o máximo como 20 caracteres
+
                 />
             )}
 

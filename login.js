@@ -1,20 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { CheckBox } from 'react-native-elements';
 import { API_URL } from './config';
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
 
-  // Função para navegar diretamente à tela inicial sem autenticação
-  const handleAccessWithoutLogin = () => {
-    navigation.navigate('TelaInicial', { nome: 'Cesar Santos', userType: 'aluno' });
-  };
+  // Verifica o estado de login na inicialização
+  useEffect(() => {
+    const checkLoginStatus = async () => {
+      const isLoggedIn = await AsyncStorage.getItem('isLoggedIn');
+      if (isLoggedIn === 'true') {
+        navigation.navigate('TelaInicial'); // Redireciona para a tela inicial se o usuário já estiver logado
+      }
+    };
 
-  // Função original de autenticação do login
+    checkLoginStatus();
+  }, []);
+
   const handleLogin = async () => {
     try {
-      const response = await fetch('http://54.221.122.186:5000/login', {
+      const response = await fetch(`${API_URL}/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -26,13 +35,18 @@ const LoginScreen = ({ navigation }) => {
       });
 
       const data = await response.json();
-      console.log('Resposta da API:', data); // Mostra a resposta no console
+      console.log('Resposta da API:', data);
 
       if (!response.ok) {
         throw new Error(data.message || 'Erro ao realizar login');
       }
 
       Alert.alert('Sucesso', 'Login realizado com sucesso!');
+
+      // Salva o estado de login se "Lembrar-me" estiver marcado
+      if (rememberMe) {
+        await AsyncStorage.setItem('isLoggedIn', 'true');
+      }
       navigation.navigate('TelaInicial', { nome: data.nome, userType: data.tipo });
 
     } catch (error) {
@@ -58,20 +72,23 @@ const LoginScreen = ({ navigation }) => {
             onChangeText={setPassword}
             secureTextEntry={true}
         />
+
+        {/* Lembrar-me e Esqueceu a senha */}
+        <View style={styles.rememberForgotContainer}>
+          <CheckBox
+              title="Lembrar-me"
+              checked={rememberMe}
+              onPress={() => setRememberMe(!rememberMe)}
+              containerStyle={styles.checkbox}
+          />
+          <TouchableOpacity onPress={() => navigation.navigate('EsqueciSenha')}>
+            <Text style={styles.forgotPassword}>Esqueceu a senha?</Text>
+          </TouchableOpacity>
+        </View>
+
         <TouchableOpacity style={styles.button} onPress={handleLogin}>
           <Text style={styles.buttonText}>Entrar</Text>
         </TouchableOpacity>
-
-        {/* Botão para entrar sem autenticação */}
-        <TouchableOpacity onPress={handleAccessWithoutLogin} style={styles.visitorButton}>
-          <Text style={styles.visitorButtonText}>Entrar como visitante</Text>
-        </TouchableOpacity>
-
-        {/*
-                Para acesso sem autenticação, você pode comentar ou remover
-                a chamada da função handleLogin acima, permitindo que
-                a função handleAccessWithoutLogin seja usada para entrar diretamente.
-            */}
       </View>
   );
 };
@@ -96,6 +113,21 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     paddingLeft: 10,
   },
+  rememberForgotContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  checkbox: {
+    backgroundColor: 'transparent',
+    borderWidth: 0,
+    padding: 0,
+  },
+  forgotPassword: {
+    color: '#000066',
+    textDecorationLine: 'underline',
+  },
   button: {
     backgroundColor: '#000066',
     paddingVertical: 10,
@@ -105,13 +137,6 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#FFFFFF',
     fontWeight: 'bold',
-  },
-  visitorButton: {
-    marginTop: 20,
-    alignItems: 'center',
-  },
-  visitorButtonText: {
-    color: '#000066',
   },
 });
 

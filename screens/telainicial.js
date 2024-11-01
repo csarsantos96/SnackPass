@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image, ScrollView, Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { useCart } from '../context/CartContext';
 import { useFocusEffect } from '@react-navigation/native';
@@ -7,7 +8,6 @@ import { FontAwesome } from '@expo/vector-icons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { API_URL } from '../config';
-
 
 // Mapeamento das imagens dos produtos
 const imageMapping = {
@@ -44,7 +44,7 @@ const TelaInicial = ({ navigation, route }) => {
     const fetchProducts = async () => {
       try {
         const response = await axios.get(`${API_URL}/produtos`);
-        console.log('Dados recebidos da API:', response.data); // Log para verificar se os dados atualizados estão sendo recebidos
+        console.log('Dados recebidos da API:', response.data);
         setProducts(response.data);
       } catch (error) {
         console.error('Erro ao buscar produtos:', error);
@@ -67,6 +67,17 @@ const TelaInicial = ({ navigation, route }) => {
     setActivePage('TelaInicial');
   });
 
+  const handleLogout = async () => {
+    try {
+      await AsyncStorage.removeItem('isLoggedIn');
+      Alert.alert('Logout', 'Você saiu com sucesso.');
+      navigation.navigate('Login');
+    } catch (error) {
+      console.error('Erro ao fazer logout:', error);
+      Alert.alert('Erro', 'Não foi possível sair. Tente novamente.');
+    }
+  };
+
   return (
       <View style={styles.container}>
         <View style={styles.topSection}>
@@ -74,6 +85,10 @@ const TelaInicial = ({ navigation, route }) => {
           <TouchableOpacity onPress={() => navigation.navigate('Carrinho')} style={styles.cartButton}>
             <FontAwesome name="shopping-cart" size={24} color="#FFFFFF" />
             <Text style={styles.cartText}> Carrinho ({totalItemsInCart})</Text>
+          </TouchableOpacity>
+          {/* Botão de Logout */}
+          <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
+            <Text style={styles.logoutText}>Logout</Text>
           </TouchableOpacity>
         </View>
 
@@ -209,6 +224,16 @@ const styles = StyleSheet.create({
   cartText: {
     color: '#FFFFFF',
     marginLeft: 5,
+  },
+  logoutButton: {
+    marginTop: 10,
+    backgroundColor: '#A80000',
+    padding: 8,
+    borderRadius: 8,
+  },
+  logoutText: {
+    color: '#FFFFFF',
+    fontWeight: 'bold',
   },
   filtersContainer: {
     flexDirection: 'row',
