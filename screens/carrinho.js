@@ -1,9 +1,11 @@
 import React from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert, Image } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useCart } from '../context/CartContext';
+
+
 
 const Carrinho = ({ navigation }) => {
   const { cartItems, removeFromCart, incrementProduct, decrementProduct, getTotalPrice } = useCart();
@@ -30,6 +32,10 @@ const Carrinho = ({ navigation }) => {
 
     return (
         <View style={styles.produtoContainer}>
+          <Image
+              source={item.image}
+              style={styles.produtoImagem}
+          />
           <Text style={styles.produtoNome}>{item.name || item.nome || 'Produto sem nome'}</Text>
           <Text style={styles.produtoPreco}>
             R$ {price > 0 ? price.toFixed(2).replace('.', ',') : 'Preço não disponível'}
@@ -49,6 +55,7 @@ const Carrinho = ({ navigation }) => {
         </View>
     );
   };
+
 
   return (
     <View style={styles.container}>
@@ -139,6 +146,12 @@ const styles = StyleSheet.create({
     padding: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
+  },
+  produtoImagem: {
+    width: 60,
+    height: 60,
+    borderRadius: 8,
+    marginRight: 10,
   },
   produtoNome: {
     fontSize: 18,

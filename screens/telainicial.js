@@ -77,7 +77,12 @@ const TelaInicial = ({ navigation, route }) => {
       return;
     }
 
-    const productToAdd = { ...item, price, name: item.nome };
+    const productToAdd = {
+      ...item,
+      price,
+      name: item.nome,
+      image: imageMapping[item.nome] || require('../assets/default.png')  // Adiciona a imagem ao item
+    };
 
     addToCart(productToAdd);
     Alert.alert('Sucesso', `${item.nome} foi adicionado ao seu carrinho.`);
