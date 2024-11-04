@@ -17,7 +17,7 @@ const CadastroScreen = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [selectedLevel, setSelectedLevel] = useState(null);
-    const [selectedService, setSelectedService] = useState(null);
+    const [selectedService, setSelectedService] = useState(null); // Variável corrigida
     const [isStudent, setIsStudent] = useState(true);
     const [loading, setLoading] = useState(false);
 
@@ -25,7 +25,7 @@ const CadastroScreen = () => {
         if (type === 'student') {
             setSelectedLevel(value);
         } else {
-            setSelectedService(value);
+            setSelectedService(value); // Usando selectedService para funcionários
         }
     };
 
@@ -54,7 +54,7 @@ const CadastroScreen = () => {
     };
 
     const criarConta = async () => {
-        // Cria o objeto de dados a ser enviado para a API, removendo a matrícula para funcionários
+        // Cria o objeto de dados a ser enviado para a API
         const dados = {
             email: email,
             senha: password,
@@ -69,7 +69,7 @@ const CadastroScreen = () => {
             dados.matricula = matricula;
             dados.nivel_ensino = selectedLevel;
         } else {
-            dados.servico = selectedService;
+            dados.servico = selectedService; // Corrigido para usar selectedService
         }
 
         console.log('Enviando dados para a API:', dados);
