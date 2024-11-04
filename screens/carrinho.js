@@ -30,7 +30,8 @@ const Carrinho = ({ navigation }) => {
 
     return (
       <View style={styles.produtoContainer}>
-        <Text style={styles.produtoNome}>{item.name || 'Produto sem nome'}</Text>
+        <Text style={styles.produtoNome}>{item.name || item.nome || 'Produto sem nome'}</Text>
+
         <Text style={styles.produtoPreco}>
           {price > 0 ? `R$ ${price.toFixed(2)}` : 'Preço não disponível'}
         </Text>

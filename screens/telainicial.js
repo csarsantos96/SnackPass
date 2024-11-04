@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image, ScrollView, 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { useCart } from '../context/CartContext';
+
 import { useFocusEffect } from '@react-navigation/native';
 import { FontAwesome } from '@expo/vector-icons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
@@ -38,6 +39,7 @@ const TelaInicial = ({ navigation, route }) => {
   const [products, setProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('Todos');
   const { cartItems, addToCart } = useCart();
+  const totalItemsInCart = cartItems.reduce((total, item) => total + item.quantity, 0);
   const [activePage, setActivePage] = useState('TelaInicial');
 
   useEffect(() => {
@@ -58,14 +60,28 @@ const TelaInicial = ({ navigation, route }) => {
       : products.filter(product => product.id_categoria === selectedCategory);
 
   const handleAddToCart = (item) => {
-    addToCart(item);
+    let price;
+
+    if (userType === 'aluno' && item.preco_aluno !== null) {
+      price = parseFloat(item.preco_aluno);
+      console.log(`Preço para aluno aplicado: ${price} - Produto: ${item.nome}`);
+    } else if (userType === 'funcionario' && item.preco_funcionario !== null) {
+      price = parseFloat(item.preco_funcionario);
+      console.log(`Preço para funcionário aplicado: ${price} - Produto: ${item.nome}`);
+    } else if (item.preco_base !== null) {
+      price = parseFloat(item.preco_base);
+      console.log(`Preço base aplicado: ${price} - Produto: ${item.nome}`);
+    } else {
+      console.error('Produto adicionado sem preço:', item);
+      Alert.alert('Erro', 'Este produto não possui um preço definido.');
+      return;
+    }
+
+    const productToAdd = { ...item, price, name: item.nome };
+
+    addToCart(productToAdd);
+    Alert.alert('Sucesso', `${item.nome} foi adicionado ao seu carrinho.`);
   };
-
-  const totalItemsInCart = cartItems.reduce((total, item) => total + item.quantity, 0);
-
-  useFocusEffect(() => {
-    setActivePage('TelaInicial');
-  });
 
   const handleLogout = async () => {
     try {
