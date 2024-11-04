@@ -29,25 +29,24 @@ const Carrinho = ({ navigation }) => {
     const price = typeof item.price === 'number' ? item.price : 0;
 
     return (
-      <View style={styles.produtoContainer}>
-        <Text style={styles.produtoNome}>{item.name || item.nome || 'Produto sem nome'}</Text>
-
-        <Text style={styles.produtoPreco}>
-          {price > 0 ? `R$ ${price.toFixed(2)}` : 'Preço não disponível'}
-        </Text>
-        <View style={styles.quantidadeContainer}>
-          <TouchableOpacity style={styles.quantidadeButton} onPress={() => decrementProduct(item.id)}>
-            <Text style={styles.quantidadeButtonText}>-</Text>
-          </TouchableOpacity>
-          <Text style={styles.quantidadeText}>{item.quantity || 1}</Text>
-          <TouchableOpacity style={styles.quantidadeButton} onPress={() => incrementProduct(item.id)}>
-            <Text style={styles.quantidadeButtonText}>+</Text>
+        <View style={styles.produtoContainer}>
+          <Text style={styles.produtoNome}>{item.name || item.nome || 'Produto sem nome'}</Text>
+          <Text style={styles.produtoPreco}>
+            R$ {price > 0 ? price.toFixed(2).replace('.', ',') : 'Preço não disponível'}
+          </Text>
+          <View style={styles.quantidadeContainer}>
+            <TouchableOpacity style={styles.quantidadeButton} onPress={() => decrementProduct(item.id)}>
+              <Text style={styles.quantidadeButtonText}>-</Text>
+            </TouchableOpacity>
+            <Text style={styles.quantidadeText}>{item.quantity || 1}</Text>
+            <TouchableOpacity style={styles.quantidadeButton} onPress={() => incrementProduct(item.id)}>
+              <Text style={styles.quantidadeButtonText}>+</Text>
+            </TouchableOpacity>
+          </View>
+          <TouchableOpacity style={styles.removerButton} onPress={() => removerProduto(item.id)}>
+            <Text style={styles.removerButtonText}>Excluir</Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.removerButton} onPress={() => removerProduto(item.id)}>
-          <Text style={styles.removerButtonText}>Excluir</Text>
-        </TouchableOpacity>
-      </View>
     );
   };
 
@@ -69,7 +68,7 @@ const Carrinho = ({ navigation }) => {
         <View style={styles.totalContainer}>
           <Text style={styles.totalLabel}>Valor total:</Text>
           <Text style={styles.totalValue}>
-            R$ {getTotalPrice() ? getTotalPrice().toFixed(2) : '0.00'}
+            R$ {(getTotalPrice() || 0).toFixed(2).replace('.', ',')}
           </Text>
         </View>
 
