@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image, ScrollView, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image, ScrollView, Alert, ImageBackground } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { useCart } from '../context/CartContext';
@@ -81,6 +81,7 @@ const TelaInicial = ({ navigation, route }) => {
   return (
       <View style={styles.container}>
         <View style={styles.topSection}>
+          <ImageBackground source={require('../assets/fundo.jpg')} style={styles.topSection}/>
           <Text style={styles.title}>Bem-vindo(a), {nome}!</Text>
           <TouchableOpacity onPress={() => navigation.navigate('Carrinho')} style={styles.cartButton}>
             <FontAwesome name="shopping-cart" size={24} color="#FFFFFF" />
@@ -206,9 +207,10 @@ const styles = StyleSheet.create({
   },
   topSection: {
     flex: 0.5,
-    backgroundColor: '#1A1A1A',
     justifyContent: 'center',
     alignItems: 'center',
+    width: "100%",
+    height: 200,// Ajusta o tamanho da imagem de fundo
   },
   title: {
     fontSize: 24,
@@ -220,6 +222,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: 10,
+
   },
   cartText: {
     color: '#FFFFFF',
