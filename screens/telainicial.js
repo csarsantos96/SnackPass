@@ -25,10 +25,10 @@ const imageMapping = {
   'Fanta Uva': require('../assets/fanta-uva.png'),
   'Fanta Laranja': require('../assets/fanta-laranja.png'),
   'Pepsi': require('../assets/pepsi.png'),
-  'Suco Natural de Laranja': require('../assets/suco-laranja.png'),
-  'Suco Natural de Acerola': require('../assets/suco-acerola.png'),
-  'Suco Natural de Maracuja': require('../assets/suco-maracuja.png'),
-  'Guaraná Antarctica': require('../assets/guarana.png'),
+  'Suco de Laranja': require('../assets/suco-laranja.png'),
+  'Suco de Acerola': require('../assets/suco-acerola.png'),
+  'Suco de Maracujá': require('../assets/suco-maracuja.png'),
+  'Guaraná Antartica': require('../assets/guarana.png'),
   'Gatorade': require('../assets/gatorade.png'),
   // Adicione mais mapeamentos de imagens conforme necessário
 };

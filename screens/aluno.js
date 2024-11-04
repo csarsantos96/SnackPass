@@ -17,7 +17,7 @@ const CadastroScreen = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [selectedLevel, setSelectedLevel] = useState(null);
-    const [selectedService, setSelectedService] = useState(null); // Variável corrigida
+    const [selectedService, setSelectedService] = useState(null);
     const [isStudent, setIsStudent] = useState(true);
     const [loading, setLoading] = useState(false);
 
@@ -25,7 +25,7 @@ const CadastroScreen = () => {
         if (type === 'student') {
             setSelectedLevel(value);
         } else {
-            setSelectedService(value); // Usando selectedService para funcionários
+            setSelectedService(value);
         }
     };
 
@@ -53,14 +53,20 @@ const CadastroScreen = () => {
         return passwordRegex.test(password);
     };
 
+    const formatBirthDate = (date) => {
+        const [day, month, year] = date.split('/');
+        return `${month}/${day}/${year}`;
+    };
+
     const criarConta = async () => {
-        // Cria o objeto de dados a ser enviado para a API
+        const formattedBirthDate = formatBirthDate(birthDate);
+
         const dados = {
             email: email,
             senha: password,
             tipo: isStudent ? 'aluno' : 'funcionario',
             nome: fullName,
-            data_nascimento: birthDate,
+            data_nascimento: formattedBirthDate,
             telefone: phone,
             cpf: cpf,
         };
@@ -69,7 +75,7 @@ const CadastroScreen = () => {
             dados.matricula = matricula;
             dados.nivel_ensino = selectedLevel;
         } else {
-            dados.servico = selectedService; // Corrigido para usar selectedService
+            dados.servico = selectedService;
         }
 
         console.log('Enviando dados para a API:', dados);
@@ -91,8 +97,6 @@ const CadastroScreen = () => {
             }
 
             const data = await response.json();
-            console.log('Resposta da API:', data);
-
             if (response.ok) {
                 navigation.navigate('TelaInicial', { nome: fullName });
             } else {
@@ -232,7 +236,7 @@ const CadastroScreen = () => {
                     placeholder="Matrícula"
                     value={matricula}
                     onChangeText={setMatricula}
-                    maxLength={20} // Define o máximo como 20 caracteres
+                    maxLength={20}
                 />
             )}
 
