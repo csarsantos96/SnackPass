@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   scrollView: {
-    maxHeight: 350,
+    maxHeight: 380,
   },
   cartItemImage: {
     width: 60,
