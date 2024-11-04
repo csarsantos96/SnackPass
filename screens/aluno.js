@@ -54,7 +54,8 @@ const CadastroScreen = () => {
     };
 
     const criarConta = async () => {
-        console.log('Enviando dados para a API:', {
+        // Cria o objeto de dados a ser enviado para a API, removendo a matrícula para funcionários
+        const dados = {
             email: email,
             senha: password,
             tipo: isStudent ? 'aluno' : 'funcionario',
@@ -62,28 +63,24 @@ const CadastroScreen = () => {
             data_nascimento: birthDate,
             telefone: phone,
             cpf: cpf,
-            matricula: isStudent ? matricula : undefined,
-            nivel_ensino: isStudent ? selectedLevel : undefined,
-            servico: !isStudent ? selectedService : undefined
-        });
+        };
+
+        if (isStudent) {
+            dados.matricula = matricula;
+            dados.nivel_ensino = selectedLevel;
+        } else {
+            dados.servico = selectedService;
+        }
+
+        console.log('Enviando dados para a API:', dados);
+
         try {
             const response = await fetch(`${API_URL}/criar-conta`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({
-                    email: email,
-                    senha: password,
-                    tipo: isStudent ? 'aluno' : 'funcionario',
-                    nome: fullName,
-                    data_nascimento: birthDate,
-                    telefone: phone,
-                    cpf: cpf,
-                    matricula: isStudent ? matricula : undefined,
-                    nivel_ensino: isStudent ? selectedLevel : undefined,
-                    servico: !isStudent ? selectedService : undefined
-                }),
+                body: JSON.stringify(dados),
             });
 
             if (!response.ok) {
@@ -97,7 +94,7 @@ const CadastroScreen = () => {
             console.log('Resposta da API:', data);
 
             if (response.ok) {
-                navigation.navigate('TelaInicial', { nome: fullName }); // Passa o nome do usuário
+                navigation.navigate('TelaInicial', { nome: fullName });
             } else {
                 Alert.alert('Erro', data.message || 'Erro desconhecido.');
             }
@@ -118,7 +115,7 @@ const CadastroScreen = () => {
             return;
         }
 
-        if (matricula.length < 10 || matricula.length > 20) {
+        if (isStudent && (matricula.length < 10 || matricula.length > 20)) {
             Alert.alert('Erro', 'A matrícula deve ter entre 10 e 20 caracteres.');
             return;
         }
@@ -236,7 +233,6 @@ const CadastroScreen = () => {
                     value={matricula}
                     onChangeText={setMatricula}
                     maxLength={20} // Define o máximo como 20 caracteres
-
                 />
             )}
 
