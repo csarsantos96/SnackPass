@@ -94,7 +94,7 @@ const TelaInicial = ({ navigation, route }) => {
 
         <View style={styles.filtersContainer}>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.filters}>
-            {['Todos', 'Combos', 'Comidas', 'Bebidas', 'Outros'].map((category) => (
+            {['Todos', 'Salgados', 'Bebidas', 'Doces', "Sorvetes"].map((category) => (
                 <TouchableOpacity
                     key={category}
                     onPress={() => setSelectedCategory(category)}
@@ -269,7 +269,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#E9E4DE',
     borderRadius: 8,
     padding: 10,
-    width: '47%',
+    width: '45%',
     height: 200,
   },
   productImage: {
