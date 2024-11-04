@@ -5,15 +5,13 @@ import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useCart } from '../context/CartContext';
 
-
-
 const Carrinho = ({ navigation }) => {
   const { cartItems, removeFromCart, incrementProduct, decrementProduct, getTotalPrice } = useCart();
 
   const removerProduto = (id) => {
     Alert.alert(
       'Confirmar Exclusão',
-      'Você tem certeza que deseja remover este item do carrinho?',
+      'Você deseja remover este item do carrinho?',
       [
         { text: 'Cancelar', style: 'cancel' },
         {
@@ -27,35 +25,42 @@ const Carrinho = ({ navigation }) => {
     );
   };
 
+  const handleDecrement = (id, quantity) => {
+    if (quantity > 1) {
+      decrementProduct(id);
+    } else {
+      removerProduto(id);
+    }
+  };
+
   const renderItem = ({ item }) => {
     const price = typeof item.price === 'number' ? item.price : 0;
 
     return (
-        <View style={styles.produtoContainer}>
-          <Image
-              source={item.image}
-              style={styles.produtoImagem}
-          />
-          <Text style={styles.produtoNome}>{item.name || item.nome || 'Produto sem nome'}</Text>
-          <Text style={styles.produtoPreco}>
-            R$ {price > 0 ? price.toFixed(2).replace('.', ',') : 'Preço não disponível'}
-          </Text>
-          <View style={styles.quantidadeContainer}>
-            <TouchableOpacity style={styles.quantidadeButton} onPress={() => decrementProduct(item.id)}>
-              <Text style={styles.quantidadeButtonText}>-</Text>
-            </TouchableOpacity>
-            <Text style={styles.quantidadeText}>{item.quantity || 1}</Text>
-            <TouchableOpacity style={styles.quantidadeButton} onPress={() => incrementProduct(item.id)}>
-              <Text style={styles.quantidadeButtonText}>+</Text>
-            </TouchableOpacity>
-          </View>
-          <TouchableOpacity style={styles.removerButton} onPress={() => removerProduto(item.id)}>
-            <Text style={styles.removerButtonText}>Excluir</Text>
+      <View style={styles.produtoContainer}>
+        <Image source={item.image} style={styles.produtoImagem} />
+        <Text style={styles.produtoNome}>{item.name || item.nome || 'Produto sem nome'}</Text>
+        <Text style={styles.produtoPreco}>
+          R$ {price > 0 ? price.toFixed(2).replace('.', ',') : 'Preço não disponível'}
+        </Text>
+        <View style={styles.quantidadeContainer}>
+          <TouchableOpacity
+            style={styles.quantidadeButton}
+            onPress={() => handleDecrement(item.id, item.quantity || 1)}
+          >
+            <Text style={styles.quantidadeButtonText}>-</Text>
+          </TouchableOpacity>
+          <Text style={styles.quantidadeText}>{item.quantity || 1}</Text>
+          <TouchableOpacity
+            style={styles.quantidadeButton}
+            onPress={() => incrementProduct(item.id)}
+          >
+            <Text style={styles.quantidadeButtonText}>+</Text>
           </TouchableOpacity>
         </View>
+      </View>
     );
   };
-
 
   return (
     <View style={styles.container}>
@@ -67,10 +72,8 @@ const Carrinho = ({ navigation }) => {
       />
       {cartItems.length === 0 && <Text style={styles.emptyText}>Carrinho vazio!</Text>}
 
-      
       <View style={styles.line} />
 
-      {/* Valor total e botão de pagamento */}
       <View style={styles.totalButtonContainer}>
         <View style={styles.totalContainer}>
           <Text style={styles.totalLabel}>Valor total:</Text>
@@ -87,39 +90,26 @@ const Carrinho = ({ navigation }) => {
         </TouchableOpacity>
       </View>
 
-      {/* Nav Bar */}
       <View style={styles.navBar}>
-        <TouchableOpacity
-          style={styles.navItem}
-          onPress={() => navigation.navigate('TelaInicial')}
-        >
+        <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('TelaInicial')}>
           <View style={styles.navItemContainer}>
             <FontAwesome6 name="house" size={20} color={'#A2A2A2'} />
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.navItem}
-          onPress={() => navigation.navigate('Carrinho')}
-        >
+        <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('Carrinho')}>
           <View style={styles.navItemContainer}>
             <FontAwesome name="shopping-cart" size={30} color={'#A80000'} />
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.navItem}
-          onPress={() => navigation.navigate('Pagamento')}
-        >
+        <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('Pagamento')}>
           <View style={styles.navItemContainer}>
             <FontAwesome name="credit-card" size={24} color={'#A2A2A2'} />
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.navItem}
-          onPress={() => navigation.navigate('Validação')}
-        >
+        <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('Validação')}>
           <View style={styles.navItemContainer}>
             <Ionicons name="ticket" size={30} color={'#A2A2A2'} />
           </View>

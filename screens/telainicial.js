@@ -117,14 +117,15 @@ const TelaInicial = ({ navigation, route }) => {
         <View style={styles.topSection}>
           <ImageBackground source={require('../assets/fundo.jpg')} style={styles.topSection}/>
           <Text style={styles.title}>Bem-vindo(a), {nome}!</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('Carrinho')} style={styles.cartButton}>
-            <FontAwesome name="shopping-cart" size={24} color="#FFFFFF" />
-            <Text style={styles.cartText}> Carrinho ({totalItemsInCart})</Text>
-          </TouchableOpacity>
-          {/* Botão de Logout */}
-          <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
-            <Text style={styles.logoutText}>Logout</Text>
-          </TouchableOpacity>
+          <View style={styles.cartLogoutContainer}> 
+            <TouchableOpacity onPress={() => navigation.navigate('Carrinho')} style={styles.cartButton}>
+              <FontAwesome name="shopping-cart" size={30} color="#FFFFFF" />
+              <Text style={styles.cartText}> Carrinho ({totalItemsInCart})</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
+              <Text style={styles.logoutText}>Logout</Text>
+            </TouchableOpacity>
+          </View>
         </View>
 
         <View style={styles.filtersContainer}>
@@ -252,18 +253,22 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     marginBottom: 20,
   },
-  cartButton: {
+  cartLogoutContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: 10,
-
+  },
+  cartButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginRight: 20, // Adicione uma margem direita para separar do botão de logout
   },
   cartText: {
     color: '#FFFFFF',
     marginLeft: 5,
+    fontSize: 15,
   },
   logoutButton: {
-    marginTop: 10,
     backgroundColor: '#A80000',
     padding: 8,
     borderRadius: 8,
