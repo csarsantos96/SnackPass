@@ -54,23 +54,32 @@ const TelaInicial = ({ navigation, route }) => {
   const { cartItems, addToCart } = useCart();
   const totalItemsInCart = cartItems.reduce((total, item) => total + item.quantity, 0);
   const [activePage, setActivePage] = useState('TelaInicial');
+//Filtro por ID
+  const categoryIds = {
+    Todos: null,         // Mostra todos os produtos
+    Salgados: 1,
+    Bebidas: 3,
+    Doces: 2,
+    Sorvetes: 4,
+  };
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const response = await axios.get(`${API_URL}/produtos`);
-        console.log('Dados recebidos da API:', response.data);
-        setProducts(response.data);
+        console.log('Dados recebidos da API:', response.data); // Verifique se é um array
+        setProducts(response.data || []); // Se `response.data` for undefined, defina como []
       } catch (error) {
         console.error('Erro ao buscar produtos:', error);
       }
     };
     fetchProducts();
   }, []);
-
+// lista de filtro
   const filteredProducts = selectedCategory === 'Todos'
       ? products
-      : products.filter(product => product.id_categoria === selectedCategory);
+      : products.filter(product => product.id_categoria === categoryIds[selectedCategory]);
+
 
   const handleAddToCart = (item) => {
     let price;
