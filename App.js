@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, Image, TouchableOpacity, Text, ActivityIndicator } from 'react-native';
