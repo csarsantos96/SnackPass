@@ -15,7 +15,7 @@ const HomeScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Image source={ellipse2} style={styles.ellipse2} />
-      
+      s
       <LinearGradient
         colors={['rgba(202, 146, 123, 0)', 'rgba(4, 0, 51, 0.14)']}
         style={styles.shadowContainer}
