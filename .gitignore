@@ -8,6 +8,9 @@ node_modules/
 dist/
 web-build/
 backend/
+bd/
+api/
+.vercel.json
 
 # Native
 *.orig.*

@@ -1,186 +1,361 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, Button, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { CheckBox } from 'react-native-elements';
+import { useFonts } from 'expo-font';
+import { useNavigation } from '@react-navigation/native';
+import { TextInputMask } from 'react-native-masked-text';
+import { API_URL } from '../config'; // Importando a URL da API do config.js
 
-// Função de validação de CPF
-const isValidCPF = (cpf) => {
-    cpf = cpf.replace(/[^\d]/g, ''); // Remove caracteres não numéricos
-
-    if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) {
-        return false;
-    }
-
-    let soma = 0;
-    let resto;
-
-    for (let i = 1; i <= 9; i++) {
-        soma += parseInt(cpf.substring(i - 1, i)) * (11 - i);
-    }
-
-    resto = (soma * 10) % 11;
-    if (resto === 10 || resto === 11) resto = 0;
-    if (resto !== parseInt(cpf.substring(9, 10))) return false;
-
-    soma = 0;
-
-    for (let i = 1; i <= 10; i++) {
-        soma += parseInt(cpf.substring(i - 1, i)) * (12 - i);
-    }
-
-    resto = (soma * 10) % 11;
-    if (resto === 10 || resto === 11) resto = 0;
-    if (resto !== parseInt(cpf.substring(10, 11))) return false;
-
-    return true;
-};
-
-const handleSubmit = () => {
-    if (!isValidCPF(cpf)) {
-        alert('CPF inválido. Por favor, verifique os dados.');
-        return;
-    }
-
-    console.log("Nome Completo:", fullName);
-    console.log("Data de Nascimento:", birthDate);
-    console.log("Telefone:", phone);
-    console.log("Email:", email);
-    console.log("CPF:", cpf);
-    console.log("Matrícula:", matricula);
-    console.log("Nível de Ensino Selecionado:", selectedLevel);
-};
-
-
-const AlunoScreen = () => {
+const CadastroScreen = () => {
+    const navigation = useNavigation();
     const [fullName, setFullName] = useState('');
     const [birthDate, setBirthDate] = useState('');
     const [phone, setPhone] = useState('');
     const [email, setEmail] = useState('');
     const [cpf, setCpf] = useState('');
     const [matricula, setMatricula] = useState('');
-
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [selectedLevel, setSelectedLevel] = useState(null);
+    const [selectedService, setSelectedService] = useState(null);
+    const [isStudent, setIsStudent] = useState(true);
+    const [loading, setLoading] = useState(false);
 
-    const handleCheckboxChange = (level) => {
-        setSelectedLevel(level);
+    const handleCheckboxChange = (value, type) => {
+        if (type === 'student') {
+            setSelectedLevel(value);
+        } else {
+            setSelectedService(value);
+        }
     };
 
-    const handleSubmit = () => {
-        // Validação do CPF antes de processar o envio
-        if (!isValidCPF(cpf)) {
-            alert('CPF inválido. Por favor, verifique os dados.');
+    const isValidCpf = (cpf) => {
+        cpf = cpf.replace(/[^\d]+/g, '');
+        if (cpf.length !== 11) return false;
+
+        let sum = 0, remainder;
+        for (let i = 1; i <= 9; i++) sum += parseInt(cpf.substring(i - 1, i)) * (11 - i);
+        remainder = (sum * 10) % 11;
+        if (remainder === 10 || remainder === 11) remainder = 0;
+        if (remainder !== parseInt(cpf.substring(9, 10))) return false;
+
+        sum = 0;
+        for (let i = 1; i <= 10; i++) sum += parseInt(cpf.substring(i - 1, i)) * (12 - i);
+        remainder = (sum * 10) % 11;
+        if (remainder === 10 || remainder === 11) remainder = 0;
+        if (remainder !== parseInt(cpf.substring(10, 11))) return false;
+
+        return true;
+    };
+
+    const isValidPassword = (password) => {
+        const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        return passwordRegex.test(password);
+    };
+
+    const formatBirthDate = (date) => {
+        const [day, month, year] = date.split('/');
+        return `${month}/${day}/${year}`;
+    };
+
+    const criarConta = async () => {
+        const formattedBirthDate = formatBirthDate(birthDate);
+
+        const dados = {
+            email: email,
+            senha: password,
+            tipo: isStudent ? 'aluno' : 'funcionario',
+            nome: fullName,
+            data_nascimento: formattedBirthDate,
+            telefone: phone,
+            cpf: cpf,
+        };
+
+        if (isStudent) {
+            dados.matricula = matricula;
+            dados.nivel_ensino = selectedLevel;
+        } else {
+            dados.servico = selectedService;
+        }
+
+        console.log('Enviando dados para a API:', dados);
+
+        try {
+            const response = await fetch(`${API_URL}/criar-conta`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(dados),
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('Erro na resposta:', errorText);
+                Alert.alert('Erro', `Erro na resposta: ${errorText}`);
+                return;
+            }
+
+            const data = await response.json();
+            if (response.ok) {
+                navigation.navigate('TelaInicial', { nome: fullName });
+            } else {
+                Alert.alert('Erro', data.message || 'Erro desconhecido.');
+            }
+        } catch (error) {
+            console.error('Erro na requisição:', error);
+            Alert.alert('Erro', 'Erro na requisição ao servidor.');
+        }
+    };
+
+    const isValidEmail = (email) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
+
+    const handleSubmit = async () => {
+        if (!fullName || !phone) {
+            Alert.alert('Erro', 'Todos os campos são obrigatórios.');
             return;
         }
 
-        console.log("Nome Completo:", fullName);
-        console.log("Data de Nascimento:", birthDate);
-        console.log("Telefone:", phone);
-        console.log("Email:", email);
-        console.log("CPF:", cpf);
-        console.log("Matrícula:", matricula);
-        console.log("Nível de Ensino Selecionado:", selectedLevel);
+        if (isStudent && (matricula.length < 10 || matricula.length > 20)) {
+            Alert.alert('Erro', 'A matrícula deve ter entre 10 e 20 caracteres.');
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            Alert.alert('Erro', 'As senhas não conferem. Por favor, verifique.');
+            return;
+        }
+
+        if (!isValidPassword(password)) {
+            Alert.alert('Erro', 'A senha deve ter no mínimo 8 caracteres, incluindo letras, números e caracteres especiais.');
+            return;
+        }
+
+        if (!isValidCpf(cpf)) {
+            Alert.alert('Erro', 'CPF inválido. Por favor, insira um CPF válido.');
+            return;
+        }
+
+        if (!isValidEmail(email)) {
+            Alert.alert('Erro', 'Email inválido. Por favor, insira um email válido.');
+            return;
+        }
+
+        if (isStudent && !selectedLevel) {
+            Alert.alert('Erro', 'Por favor, selecione o nível de ensino.');
+            return;
+        }
+
+        if (!isStudent && !selectedService) {
+            Alert.alert('Erro', 'Por favor, selecione o serviço.');
+            return;
+        }
+
+        setLoading(true);
+
+        try {
+            await criarConta();
+        } finally {
+            setLoading(false);
+        }
     };
+
+    const [fontsLoaded] = useFonts({
+        'Sora': require('../assets/fonts/Sora-Regular.ttf'),
+    });
+
+    if (!fontsLoaded) {
+        return null;
+    }
 
     return (
         <ScrollView contentContainerStyle={styles.screenContainer}>
-            <Text style={styles.title}>Formulário do Aluno</Text>
+            <Text style={styles.title}>Formulário de Cadastro</Text>
+
+            <View style={styles.switchContainer}>
+                <TouchableOpacity onPress={() => setIsStudent(true)} style={[styles.switchButton, isStudent && styles.activeButton]}>
+                    <Text style={[styles.switchText, isStudent && styles.activeText]}>Aluno</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => setIsStudent(false)} style={[styles.switchButton, !isStudent && styles.activeButton]}>
+                    <Text style={[styles.switchText, !isStudent && styles.activeText]}>Funcionário</Text>
+                </TouchableOpacity>
+            </View>
+
             <TextInput
                 style={styles.input}
                 placeholder="Nome Completo"
                 value={fullName}
                 onChangeText={setFullName}
             />
-            <TextInput
+            <TextInputMask
+                type={'datetime'}
+                options={{
+                    format: 'DD/MM/YYYY'
+                }}
                 style={styles.input}
                 placeholder="Data de Nascimento (DD/MM/AAAA)"
                 value={birthDate}
                 onChangeText={setBirthDate}
+                keyboardType="numeric"
             />
-            <TextInput
+            <TextInputMask
+                type={'cel-phone'}
+                options={{
+                    maskType: 'BRL',
+                    withDDD: true,
+                    dddMask: '(99) '
+                }}
                 style={styles.input}
                 placeholder="Telefone"
                 value={phone}
                 onChangeText={setPhone}
+                keyboardType="numeric"
             />
             <TextInput
                 style={styles.input}
                 placeholder="Email"
                 value={email}
                 onChangeText={setEmail}
+                keyboardType="email-address"
             />
-            <TextInput
+            <TextInputMask
+                type={'cpf'}
                 style={styles.input}
                 placeholder="CPF"
                 value={cpf}
                 onChangeText={setCpf}
+                keyboardType="numeric"
+            />
+
+            {isStudent && (
+                <TextInput
+                    style={styles.input}
+                    placeholder="Matrícula"
+                    value={matricula}
+                    onChangeText={setMatricula}
+                    maxLength={20}
+                />
+            )}
+
+            <TextInput
+                style={styles.input}
+                placeholder="Senha"
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry={true}
             />
             <TextInput
                 style={styles.input}
-                placeholder="Matrícula"
-                value={matricula}
-                onChangeText={setMatricula}
+                placeholder="Confirmar Senha"
+                value={confirmPassword}
+                onChangeText={setConfirmPassword}
+                secureTextEntry={true}
             />
 
-            <Text style={styles.checkboxLabel}>Nível de Ensino:</Text>
-            <View style={styles.checkboxContainer}>
-                <CheckBox
-                    title='Ensino Infantil'
-                    checked={selectedLevel === 'infantil'}
-                    onPress={() => handleCheckboxChange('infantil')}
-                />
-            </View>
-            <View style={styles.checkboxContainer}>
-                <CheckBox
-                    title='Ensino Fundamental I'
-                    checked={selectedLevel === 'fundamentalI'}
-                    onPress={() => handleCheckboxChange('fundamentalI')}
-                />
-            </View>
-            <View style={styles.checkboxContainer}>
-                <CheckBox
-                    title='Ensino Fundamental II'
-                    checked={selectedLevel === 'fundamentalII'}
-                    onPress={() => handleCheckboxChange('fundamentalII')}
-                />
-            </View>
-            <View style={styles.checkboxContainer}>
-                <CheckBox
-                    title='Ensino Médio'
-                    checked={selectedLevel === 'medio'}
-                    onPress={() => handleCheckboxChange('medio')}
-                />
-            </View>
+            {isStudent ? (
+                <>
+                    <Text style={styles.checkboxLabel}>Nível de Ensino:</Text>
+                    <View style={styles.checkboxContainer}>
+                        <CheckBox title='Ensino Infantil' checked={selectedLevel === 'Ensino Infantil'} onPress={() => handleCheckboxChange('Ensino Infantil', 'student')} />
+                    </View>
+                    <View style={styles.checkboxContainer}>
+                        <CheckBox title='Ensino Fundamental I' checked={selectedLevel === 'Ensino Fundamental I'} onPress={() => handleCheckboxChange('Ensino Fundamental I', 'student')} />
+                    </View>
+                    <View style={styles.checkboxContainer}>
+                        <CheckBox title='Ensino Fundamental II' checked={selectedLevel === 'Ensino Fundamental II'} onPress={() => handleCheckboxChange('Ensino Fundamental II', 'student')} />
+                    </View>
+                    <View style={styles.checkboxContainer}>
+                        <CheckBox title='Ensino Médio' checked={selectedLevel === 'Ensino Médio'} onPress={() => handleCheckboxChange('Ensino Médio', 'student')} />
+                    </View>
+                </>
+            ) : (
+                <>
+                    <Text style={styles.checkboxLabel}>Serviço:</Text>
+                    <View style={styles.checkboxContainer}>
+                        <CheckBox title='Direção e Coordenação Pedagógica' checked={selectedService === 'coordenacao'} onPress={() => handleCheckboxChange('coordenacao', 'employee')} />
+                    </View>
+                    <View style={styles.checkboxContainer}>
+                        <CheckBox title='Administrativo' checked={selectedService === 'recepcao'} onPress={() => handleCheckboxChange('recepcao', 'employee')} />
+                    </View>
+                    <View style={styles.checkboxContainer}>
+                        <CheckBox title='Serviços Gerais' checked={selectedService === 'servicosGerais'} onPress={() => handleCheckboxChange('servicosGerais', 'employee')} />
+                    </View>
+                    <View style={styles.checkboxContainer}>
+                        <CheckBox title='Professor' checked={selectedService === 'professor'} onPress={() => handleCheckboxChange('professor', 'employee')} />
+                    </View>
+                </>
+            )}
 
-            <Button title="Enviar" onPress={handleSubmit} />
+            <TouchableOpacity style={styles.button} onPress={handleSubmit} disabled={loading}>
+                <Text style={styles.buttonText}>{loading ? 'Enviando...' : 'Enviar'}</Text>
+            </TouchableOpacity>
         </ScrollView>
     );
 };
 
 const styles = StyleSheet.create({
     screenContainer: {
+        flexGrow: 1,
         padding: 20,
-        justifyContent: 'center',
     },
     title: {
         fontSize: 24,
         fontWeight: 'bold',
         marginBottom: 20,
+        textAlign: 'center',
     },
     input: {
         height: 40,
-        borderColor: 'gray',
+        borderColor: '#CCCCCC',
         borderWidth: 1,
-        marginBottom: 15,
-        paddingHorizontal: 10,
+        marginBottom: 10,
+        paddingLeft: 10,
+    },
+    switchContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        marginBottom: 20,
+    },
+    switchButton: {
+        padding: 10,
+        borderBottomWidth: 2,
+        borderBottomColor: '#CCCCCC',
+    },
+    activeButton: {
+        borderBottomColor: '#000066',
+    },
+    switchText: {
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+    activeText: {
+        color: '#000066',
+    },
+    checkboxLabel: {
+        fontWeight: 'bold',
+        marginTop: 10,
+        marginBottom: 5,
     },
     checkboxContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: 10,
     },
-    checkboxLabel: {
-        marginVertical: 10,
+    button: {
+        backgroundColor: '#000066',
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        marginTop: 20,
+        alignItems: 'center',
+        borderRadius: 5
+    },
+    buttonText: {
+        color: '#FFFFFF',
+        textAlign: 'center',
         fontWeight: 'bold',
     },
 });
 
-export default AlunoScreen;
+export default CadastroScreen;
